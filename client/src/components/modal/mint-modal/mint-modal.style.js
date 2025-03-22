@@ -30,7 +30,7 @@ export const PriceContainer = styled.div`
   border: 1px solid rgba(255,255,255,0.1);
 
   .title {
-    font-size: 12px;
+    font-size: 14px;
     position: absolute;
     top: 8px;
     left: 12px;
@@ -41,7 +41,9 @@ export const PriceContainer = styled.div`
     font-size: 20px;
     font-weight: bold;
     color: #28A745;
-    text-decoration: underline;
+    
+    padding-bottom: 1px;
+    border-bottom: 1px solid #28A745;
   }
 `
 

@@ -20,11 +20,14 @@ const ProfileComponent = () => {
             <span style={{ fontSize: "14px", color: "white" }}>
               Profile Name
             </span>
-            <span style={{ fontSize: "14px", color: "#8000FF" }}>3 XRP</span>
+            <div style={{display: 'flex', flexDirection: 'column', rowGap: '4px'}}>
+              <span style={{ fontSize: "14px", color: "#8000FF" }}>3 DBT</span>
+              <span style={{ fontSize: "14px", color: "#8000FF" }}>3 XRP</span>
+            </div>
           </ProfileInfoContainer>
         </>
       ) : (
-        <Link style={{textDecoration: false}} to="/login">
+        <Link style={{ textDecoration: false }} to="/login">
           <LoginText>로그인</LoginText>
         </Link>
       )}

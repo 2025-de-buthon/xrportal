@@ -49,7 +49,7 @@ const AdvertiseFee = ({
         <Label>예상 지불 토큰량</Label>
         <EstimatedBox>
           <EstimatedText>{estimatedTokens}</EstimatedText>
-          <TokenUnit>XRPT</TokenUnit>
+          <TokenUnit>DBT</TokenUnit>
         </EstimatedBox>
       </div>
       <ButtonWrapper>
