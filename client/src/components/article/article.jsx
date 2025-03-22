@@ -9,31 +9,35 @@ import {
 import ArticleContentComponent from "./content/article-content";
 import CommentListComponent from "./comment-list/comment-list";
 
-const ArticleComponent = ({ setIsMintModalOpen }) => {
-  
+const ArticleComponent = ({ setIsMintModalOpen, article }) => {
   return (
     <ArticleContainer>
       <ArticleHeader>
-        <h1>XRPL을 활용한 블로그의 미래</h1>
+        <h1>{article.post_title}</h1>
         <ArticleInfoContainer>
           <Profile>
             <img src="" alt="profile" />
-            <span>jiminkim</span>
+            <span>{article.writer_id}</span>
           </Profile>
           <span>0xFE2b...7c18</span>
-          <span>3월 12일</span>
+          <span>{article.createdAt}</span>
           <span style={{ color: "#CCC", textDecoration: "underline" }}>
-            👁 385
+            👁 {article.view_count}
           </span>
           <span style={{ color: "#CCC", textDecoration: "underline" }}>
-            👍🏼 7
+            👍🏼 {article.like_count}
           </span>
-          <span style={{ color: "#28A745", textDecoration: "underline" }}>
-            3 XRP
-          </span>
+          {article.sale_status && (
+            <span style={{ color: "#28A745", textDecoration: "underline" }}>
+              3 DBT
+            </span>
+          )}
         </ArticleInfoContainer>
       </ArticleHeader>
-      <ArticleContentComponent setIsMintModalOpen={setIsMintModalOpen} />
+      <ArticleContentComponent
+        setIsMintModalOpen={setIsMintModalOpen}
+        article={article}
+      />
       <CommentListComponent />
       <AdWrapper>🚀 XRPL 기반 광고 | 빠르고 저렴한 트랜잭션</AdWrapper>
     </ArticleContainer>

@@ -15,6 +15,7 @@ import WalletGenPage from './pages/walletgen/walletgen';
 import AdvertisementDetailPage from './pages/avertisement/AdvertisementDetailPage';
 
 import AdvertiseRegisterPage from './pages/advertiseregister/AdvertiseRegisterPage';
+import MyAdvertisementPage from './pages/mypage/advertisement/advertisement';
 
 
 
@@ -45,7 +46,7 @@ function App() {
         } />
         <Route path="/my/advertisements" element={
           <ProtectedRoute>
-            <HistoryPage />
+            <MyAdvertisementPage />
           </ProtectedRoute>
         } />
         <Route path="/article/:id" element={<ArticlePage />} />

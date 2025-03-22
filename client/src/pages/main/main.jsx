@@ -7,6 +7,7 @@ import {
   ArticleListContainer,
 } from "./main.style";
 import ArticleItemComponent from '../../components/article-item/article-item';
+import { $api } from '../../utils/axios';
 
 const ARTICLE_TYPE = ["Recent", "Like", "Hot"];
 
@@ -215,6 +216,21 @@ const ARTICLE_LIST = [
 
 const MainPage = () => {
   const [articleType, setArticlType] = useState("Recent");
+  const [articleList, setArticleList] = useState(ARTICLE_LIST);
+  useEffect(() => {
+    fetchrticleList();
+  }, [articleType]);
+
+  const fetchrticleList = async() => {
+    try {
+      const response = await $api.get(`/posts`);
+      if (response.data) {
+        setArticleList(response.data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <>
