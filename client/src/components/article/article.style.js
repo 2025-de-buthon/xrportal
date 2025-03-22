@@ -90,21 +90,24 @@ export const MintBtn = styled.button`
   color: white;
 `
 
+// 스타일 파일
 export const AdWrapper = styled.div`
   width: 100%;
   height: 150px;
   border-radius: 8px;
-  border: ${props => props.isBorder ? '1px solid rgba(255,255,255,0.1)' : 'none'};
+  border: ${(props) => props.isBorder ? '1px solid rgba(255,255,255,0.1)' : 'none'};
   color: #DDDDDD;
   font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-
+  cursor: pointer; /* 전체 영역 클릭 가능 */
+  
   img {
     width: 100%; 
     height: 100%;
-    object-fit: contain; 
+    object-fit: contain;
+    pointer-events: none; /* 이미지를 클릭해도 부모 컨테이너가 onClick 처리 */
   }
-`
+`;

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Wrapper } from './advertiseRegisterScreen.style';
 import AdvertiseInputPreview from './AdvertiseInputPreview';
 import AdvertiseFee from './AdvertiseFee';
+import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
 
 import useUserStore from '../../store/auth';
 import { $api } from '../../utils/axios';
@@ -23,6 +23,8 @@ const AdvertiseRegisterContainer = () => {
   // 사용자 아이디
   const { user, setUser } = useUserStore();
 
+    const navigate = useNavigate();
+  
 
   // 날짜 차이를 계산하여 토큰 수(1일 당 100토큰)를 반환하는 함수
   const calculateTokens = (start, end) => {
@@ -86,6 +88,7 @@ const AdvertiseRegisterContainer = () => {
     })
     .then((res) => {
       alert('광고 등록 성공');
+      navigate('/');
     })
     .catch((err) => {
       alert('광고 등록 실패');
