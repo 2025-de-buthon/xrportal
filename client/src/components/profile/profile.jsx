@@ -15,11 +15,12 @@ const ProfileComponent = () => {
     <Container>
       {user ? (
         <>
-          <ProfileImgContainer></ProfileImgContainer>
+          <ProfileImgContainer
+            src="https://avatars.githubusercontent.com/u/66717787?v=4"
+            alt="profile"
+          />
           <ProfileInfoContainer>
-            <span style={{ fontSize: "14px", color: "white" }}>
-              Profile Name
-            </span>
+            <span style={{ fontSize: "14px", color: "white" }}>Kim jimin</span>
             <div
               style={{
                 display: "flex",
@@ -27,8 +28,12 @@ const ProfileComponent = () => {
                 rowGap: "4px",
               }}
             >
-              <span style={{ fontSize: "14px", color: "#8000FF" }}>3 DBT</span>
-              <span style={{ fontSize: "14px", color: "#8000FF" }}>3 XRP</span>
+              <span style={{ fontSize: "14px", color: "#8000FF" }}>
+                120 DBT
+              </span>
+              <span style={{ fontSize: "14px", color: "#8000FF" }}>
+                1000 XRP
+              </span>
             </div>
           </ProfileInfoContainer>
         </>

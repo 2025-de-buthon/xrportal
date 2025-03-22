@@ -15,7 +15,10 @@ const CommentItem = ({ comment }) => {
   return (
     <CommentItemContainer>
       <ProfileContainer>
-        <img src="" alt="profile" />
+        <img
+          src="https://avatars.githubusercontent.com/u/102665117?v=4"
+          alt="profile"
+        />
         <div className="profileInfo">
           {/* TODO: wallet info 로 수정 */}
           <span style={{ color: "#FFFFFF" }}>asdsadasd</span>

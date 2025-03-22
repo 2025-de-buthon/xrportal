@@ -11,7 +11,7 @@ export const Container = styled.div`
   color: #FFF;
 `;
 
-export const ProfileImgContainer = styled.div`
+export const ProfileImgContainer = styled.img`
   width: 45px;
   height: 45px;
   border-radius: 50%;

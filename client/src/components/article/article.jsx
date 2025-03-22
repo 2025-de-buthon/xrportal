@@ -40,10 +40,13 @@ const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }
         <h1>{article.post_title}</h1>
         <ArticleInfoContainer>
           <Profile>
-            <img src="" alt="profile" />
+            <img
+              src="https://avatars.githubusercontent.com/u/66717787?v=4"
+              alt="profile"
+            />
             <span>{article.writer_id}</span>
           </Profile>
-          <span>0xFE2b...7c18</span>
+          <span>0x1ac95039</span>
           <span>{article.createdAt}</span>
           <span style={{ color: "#CCC", textDecoration: "underline" }}>
             👁 {article.view_count}
@@ -72,9 +75,11 @@ const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }
       />
       <CommentListComponent articleId={articleId} />
       {ad ? (
-        <a href='https://www.google.com'><AdWrapper isBorder={!ad}>
-          <img src={ad.ad_content} alt="ad" />
-        </AdWrapper></a>
+        <a href="https://www.google.com">
+          <AdWrapper isBorder={!ad}>
+            <img src={ad.ad_content} alt="ad" />
+          </AdWrapper>
+        </a>
       ) : (
         <AdWrapper isBorder={!!ad}>
           🚀 XRPL 기반 광고 | 빠르고 저렴한 트랜잭션
