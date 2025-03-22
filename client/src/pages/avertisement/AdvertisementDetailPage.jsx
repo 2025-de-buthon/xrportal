@@ -5,13 +5,14 @@ import { PageWrapper } from './AdvertisementDetailPage.style';
 import AdvertisementInfoComponent from '../../components/AdvertisementInfoComponent/AdvertisementInfoComponent';
 import { useParams } from 'react-router-dom';
 
+
 const AdvertisementDetailPage = () => {
-    const {id} = useParams();
-    console.log(id);
+  const { id } = useParams();
+
   return (
     <MainLayout isSidebar={false}>
       <PageWrapper>
-        <AdvertisementInfoComponent />
+        <AdvertisementInfoComponent ad_id={id}/>
       </PageWrapper>
     </MainLayout>
   );

@@ -10,22 +10,6 @@ import { $api } from "../../utils/axios";
 import NotFoundComponent from "../../components/not-found/not-found";
 import useUserStore from "../../store/auth";
 
-const ARTICLE = {
-  id: 1,
-  post_title: "asdasddasdas",
-  post_content: "content",
-  writer_id: "1",
-  owner_id: "1",
-  price: 20,
-  gas_fee: 0.001,
-  view_count: 10,
-  createdAt: "2025-03-12",
-  sale_status: false,
-  likeCount: 4,
-  owner_name: "김지민",
-  writer_name: "김겸",
-};
-
 const ArticlePage = () => {
   const [isMintModalOpen, setIsMintModalOpen] = useState(false);
   const [article, setArticle] = useState(null);
@@ -79,7 +63,7 @@ const ArticlePage = () => {
             onClickLike={onClickLike}
           />
           <ArticleProfile article={article} />
-          <TransactionComponent articleId={article.id}/>
+          <TransactionComponent articleId={article.id} />
         </ArticlePageWrapper>
       ) : (
         <NotFoundComponent />

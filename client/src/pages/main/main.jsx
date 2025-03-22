@@ -8,7 +8,7 @@ import {
 } from "./main.style";
 import ArticleItemComponent from "../../components/article-item/article-item";
 import { $api } from "../../utils/axios";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const ARTICLE_TYPE = [
   { key: "Recent", value: "latest" },
@@ -24,7 +24,9 @@ const MainPage = () => {
   const fetchrticleList = async () => {
     try {
       const response = await $api.get(
-        `/posts/all?sort=${ARTICLE_TYPE.find((v) => v.key === articleType).value}`
+        `/posts/all?sort=${
+          ARTICLE_TYPE.find((v) => v.key === articleType).value
+        }`
       );
       if (response.data) {
         setArticleList(response.data);
@@ -32,7 +34,7 @@ const MainPage = () => {
         setArticleList([]);
       }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   };
 

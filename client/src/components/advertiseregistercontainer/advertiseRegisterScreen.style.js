@@ -60,6 +60,31 @@ export const TextareaBox = styled.div`
   align-items: flex-start;
 `;
 
+/* 기존 텍스트 입력 textarea 대신 이미지 파일 입력용 스타일 */
+export const FileInputBox = styled.div`
+  width: 100%;
+  height: 168px;
+  border-radius: 8px;
+  background: #333333;
+  border: 1px solid #555555;
+  padding: 14px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const FileInput = styled.input`
+  color: #dddddd;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  width: 100%;
+  height: 100%;
+  outline: none;
+`;
+
 export const TextareaPlaceholder = styled.textarea`
   color: #dddddd;
   

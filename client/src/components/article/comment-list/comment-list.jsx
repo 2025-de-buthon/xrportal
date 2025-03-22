@@ -9,7 +9,7 @@ import {
   RespondBtnContainer,
 } from "./comment-list.style";
 import { $api } from "../../../utils/axios";
-import useUserStore from '../../../store/auth';
+import useUserStore from "../../../store/auth";
 
 const CommentItem = ({ comment }) => {
   return (
@@ -36,7 +36,7 @@ const CommentItem = ({ comment }) => {
 const CommentListComponent = ({ articleId }) => {
   const { user } = useUserStore();
   const [comments, setComments] = useState([]);
-  const [commentInputValue, setCommentInputValue] = useState('');
+  const [commentInputValue, setCommentInputValue] = useState("");
 
   useEffect(() => {
     if (!articleId) return;
@@ -54,23 +54,23 @@ const CommentListComponent = ({ articleId }) => {
     }
   };
 
-  const onSubmitComment = async (e)=> {
+  const onSubmitComment = async (e) => {
     e.preventDefault();
-    
-    if(!commentInputValue && !user && !articleId) return;
+
+    if (!commentInputValue && !user && !articleId) return;
 
     try {
-      const _ = await $api.post('/comments/create', {
+      const _ = await $api.post("/comments/create", {
         post_id: articleId,
         user_id: user.id,
-        comment_content: commentInputValue
-      })
+        comment_content: commentInputValue,
+      });
 
       fetchComments();
-    } catch(e) {
-      console.error('failed to comment submit')
+    } catch (e) {
+      console.error("failed to comment submit");
     }
-  }
+  };
 
   return (
     <CommentWrapper>
