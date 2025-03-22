@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CommentContainer,
   CommentInputForm,
@@ -8,28 +8,18 @@ import {
   ProfileContainer,
   RespondBtnContainer,
 } from "./comment-list.style";
-
-const COMMENTS = [
-  {
-    id: 1,
-    post_id: 1,
-    user_id: 1,
-    comment_content: "content",
-    createdAt: "2025-03-12",
-    likeCount: 190,
-  },
-];
+import { $api } from "../../../utils/axios";
+import useUserStore from "../../../store/auth";
 
 const CommentItem = ({ comment }) => {
-  console.log(comment);
-
   return (
     <CommentItemContainer>
       <ProfileContainer>
         <img src="" alt="profile" />
         <div className="profileInfo">
-          <span style={{ color: "#FFFFFF" }}>{comment.name}</span>
-          <span style={{ color: "#AAAAAA" }}>{comment.userId}</span>
+          {/* TODO: wallet info 로 수정 */}
+          <span style={{ color: "#FFFFFF" }}>asdsadasd</span>
+          <span style={{ color: "#AAAAAA" }}>{comment.user_id}</span>
         </div>
       </ProfileContainer>
       <CommentContainer>
@@ -37,7 +27,7 @@ const CommentItem = ({ comment }) => {
           <span className="createdAt">{comment.createdAt}</span>
           <span className="like">👍🏼 {comment.likeCount}</span>
         </div>
-        <div className="content">{comment.comment}</div>
+        <div className="content">{comment.comment_content}</div>
       </CommentContainer>
     </CommentItemContainer>
   );
@@ -46,7 +36,7 @@ const CommentItem = ({ comment }) => {
 const CommentListComponent = ({ articleId }) => {
   const { user } = useUserStore();
   const [comments, setComments] = useState([]);
-  const [commentInputValue, setCommentInputValue] = useState('');
+  const [commentInputValue, setCommentInputValue] = useState("");
 
   useEffect(() => {
     if (!articleId) return;
@@ -64,39 +54,41 @@ const CommentListComponent = ({ articleId }) => {
     }
   };
 
-  const onSubmitComment = async (e)=> {
+  const onSubmitComment = async (e) => {
     e.preventDefault();
-    
-    if(!commentInputValue && !user && !articleId) return;
+
+    if (!commentInputValue && !user && !articleId) return;
 
     try {
-      const _ = await $api.post('/comments/create', {
+      const _ = await $api.post("/comments/create", {
         post_id: articleId,
         user_id: user.id,
-        comment_content: commentInputValue
-      })
+        comment_content: commentInputValue,
+      });
 
       fetchComments();
-    } catch(e) {
-      console.error('failed to comment submit')
+    } catch (e) {
+      console.error("failed to comment submit");
     }
-  }
+  };
 
   return (
     <CommentWrapper>
-      <CommentInputForm>
+      <CommentInputForm onSubmit={onSubmitComment}>
         <h2>Comments</h2>
         <textarea
           resize={false}
           multiline={true}
           placeholder="댓글을 입력하세요."
+          value={commentInputValue}
+          onChange={(e) => setCommentInputValue(e.target.value)}
         ></textarea>
         <RespondBtnContainer>
           <button>Respond</button>
         </RespondBtnContainer>
       </CommentInputForm>
       <CommentList>
-        {COMMENTS.map((v, i) => (
+        {comments.map((v, i) => (
           <CommentItem comment={v} key={i} />
         ))}
       </CommentList>
