@@ -4,6 +4,8 @@ import { TableRow, TransactionTableContainer } from "./transaction-table.style";
 const TransactionTable = ({ data }) => {
   console.log("asd", data);
 
+const TransactionTable = () => {
+
   return (
     <TransactionTableContainer>
       <TableRow className="tableHeader">
