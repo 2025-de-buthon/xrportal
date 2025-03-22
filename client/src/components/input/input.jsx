@@ -11,7 +11,6 @@ import {
 } from './input.style';
 
 const InputComponent = ({ inputTitle, inputs, buttonLabel, onSubmit  }) => {
-
     const handleClick = (e) => {
         e.preventDefault();
         onSubmit && onSubmit();
@@ -23,7 +22,7 @@ const InputComponent = ({ inputTitle, inputs, buttonLabel, onSubmit  }) => {
       <Title>{inputTitle}</Title>
 
       {inputs.map(({ inputLabel, placeholder, inputId }) => (
-        <div key={inputId}>
+        <div className='inputContainer' key={inputId}>
           <Label htmlFor={inputId}>{inputLabel}</Label>
           <InputBox>
             <InputField

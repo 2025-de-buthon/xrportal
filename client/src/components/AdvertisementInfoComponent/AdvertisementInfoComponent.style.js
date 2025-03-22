@@ -17,7 +17,6 @@ export const BackgroundContainer = styled.div`
 
 export const XRPLTitle = styled.div`
   color: #ffffff;
-  font-family: "Inter", sans-serif;
   font-size: 28px;
   line-height: 34px;
   font-weight: 700;
@@ -36,7 +35,7 @@ export const OverlayBorder = styled.div`
 
 export const XRPLOverlayText = styled.div`
   color: #dddddd;
-  font-family: "Inter", sans-serif;
+  
   font-size: 15.63px;
   line-height: 19px;
   font-weight: 400;
@@ -69,7 +68,7 @@ export const InfoBlock = styled.div`
 
 export const Label = styled.div`
   color: #dddddd;
-  font-family: "Inter", sans-serif;
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;
@@ -85,7 +84,7 @@ export const InfoContainer = styled.div`
 
 export const InfoText = styled.div`
   color: #888888;
-  font-family: "Inter", sans-serif;
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;
@@ -103,7 +102,7 @@ export const ClickedContainer = styled.div`
 export const ClickedText = styled.div`
   color: #cccccc;
   text-decoration: underline;
-  font-family: "Inter", sans-serif;
+  
   font-size: 30px;
   line-height: 36px;
   font-weight: 700;
@@ -120,7 +119,7 @@ export const DeployedContainer = styled.div`
 
 export const DeployedText = styled.div`
   color: #2ed573;
-  font-family: "Inter", sans-serif;
+  
   font-size: 30px;
   line-height: 36px;
   font-weight: 700;

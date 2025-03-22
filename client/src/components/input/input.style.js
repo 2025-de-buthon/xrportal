@@ -11,11 +11,18 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+  }
 `;
 
 export const Title = styled.div`
   color: #ffffff;
-  font-family: "Inter";
+  
   font-size: 24px;
   line-height: 29px;
   font-weight: 700;
@@ -24,7 +31,7 @@ export const Title = styled.div`
 
 export const Label = styled.label`
   color: #dddddd;
-  font-family: "Inter";
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;
@@ -48,7 +55,7 @@ export const InputField = styled.input`
   background: transparent;
   border: none;
   color: #dddddd;
-  font-family: "Inter";
+  
   font-size: 16px;
   line-height: 19px;
 
@@ -75,7 +82,7 @@ export const ButtonWrapper = styled.button`
 
 export const ButtonText = styled.div`
   color: #ffffff;
-  font-family: "Inter";
+  
   font-size: 18px;
   line-height: 22px;
   font-weight: 700;
