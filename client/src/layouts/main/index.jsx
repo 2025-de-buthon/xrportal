@@ -9,7 +9,7 @@ const MainLayout = ({ children, isSidebar, width = 1024 }) => {
       <HeaderComponenet />
       <MainContentWrapper width={width}>
         {isSidebar && <SidebarComponent />}
-        <ContentWrapper width={isSidebar ? width - 260 : width}>{children}</ContentWrapper>
+        <ContentWrapper width={isSidebar ? width - 260 : 800 }>{children}</ContentWrapper>
       </MainContentWrapper>
     </MainLayoutWrapper>
   );
