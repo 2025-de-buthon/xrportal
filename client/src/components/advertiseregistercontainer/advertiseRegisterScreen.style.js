@@ -2,7 +2,7 @@
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
-  width: 960px;
+  width: 100%;
   padding: 32px;
   background: #222222;
   border-radius: 12px;
@@ -155,27 +155,21 @@ export const TokenUnit = styled.div`
 `;
 
 export const PreviewBox = styled.div`
-  width: 898px;
-  height: 154px;
+  width: 100%;
+  min-height: 150px;
+  padding: 16px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 export const PreviewText = styled.div`
-  width: 312.68px;
-  height: 17px;
+  width: 100%;
   color: #dddddd;
   
   font-size: 15.63px;
   line-height: 19px;
   font-weight: 400;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
 
   span:nth-of-type(2) {
     color: transparent;

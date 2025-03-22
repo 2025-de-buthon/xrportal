@@ -40,6 +40,7 @@ export const HeaderText = styled.div`
   font-size: 14px;
   color: #DDD;
   text-align: center;
+  cursor: pointer;
 `;
 
 export const HeaderBtn = styled.button`
@@ -49,4 +50,5 @@ export const HeaderBtn = styled.button`
   color: #DDD;
   border: none;
   border-radius: 8px;
+  cursor: pointer;
 `

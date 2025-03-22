@@ -19,7 +19,7 @@ import AdvertiseRegisterPage from './pages/advertiseregister/AdvertiseRegisterPa
 
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('userId');
   if (!token) {
     return <Navigate to="/login" replace />;
   }
@@ -33,10 +33,22 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/my/articles" element={<MyArticlesPage />} />
-        <Route path="/my/history" element={<HistoryPage />} />
+        <Route path="/my/articles" element={
+          <ProtectedRoute>
+            <MyArticlesPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/my/history" element={
+          <ProtectedRoute>
+            <HistoryPage />
+          </ProtectedRoute>
+        } />
         <Route path="/article/:id" element={<ArticlePage />} />
-        <Route path="/create/article" element={<CreateArticlePage />} />
+        <Route path="/create/article" element={
+          <ProtectedRoute>
+            <CreateArticlePage />
+          </ProtectedRoute>
+        } />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SingUpPage />} />
         <Route path="/advertise/:id" element={<AdvertisementDetailPage />} />
