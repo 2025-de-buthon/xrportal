@@ -1,6 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const adController = require('../controllers/adController');
+const AWS = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+
+// AWS S3 설정 (aws-sdk v2 사용)
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,           // .env에 설정
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,       // .env에 설정
+  region: process.env.AWS_REGION                          // .env에 설정 (예: us-west-2)
+});
+const s3 = new AWS.S3();
+
+const upload = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: process.env.AWS_BUCKET_NAME, // 버킷 이름만 지정 (예: xrportal)
+      // acl 옵션 제거 (버킷에서 ACL을 허용하지 않음)
+      key: function (req, file, cb) {
+        cb(null, `ads/${Date.now().toString()}-${file.originalname}`);
+      }
+    })
+  });
 
 /**
  * @swagger
@@ -14,18 +36,18 @@ const adController = require('../controllers/adController');
  * /ads/create:
  *   post:
  *     tags: [광고]
- *     summary: 광고 등록 API
- *     description: 광고 제목, S3 이미지 URL (ad_content), 시작 날짜(YYYY-MM-DD), 종료 날짜(YYYY-MM-DD), 광고비, user_id를 입력하여 광고 등록합니다.
+ *     summary: 광고 등록 API (이미지 업로드 포함)
+ *     description: 광고 제목, 시작 날짜(YYYY-MM-DD), 종료 날짜(YYYY-MM-DD), 광고비, user_id와 광고 이미지 파일을 업로드하여 광고를 등록합니다.
+ *     consumes:
+ *       - multipart/form-data
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               ad_title:
- *                 type: string
- *               ad_content:
  *                 type: string
  *               start_date:
  *                 type: string
@@ -37,11 +59,14 @@ const adController = require('../controllers/adController');
  *                 type: integer
  *               ad_price:
  *                 type: number
+ *               ad_image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: 광고 등록 성공
  */
-router.post('/create', adController.createAd);
+router.post('/create', upload.single('ad_image'), adController.createAd);
 
 /**
  * @swagger
@@ -49,7 +74,7 @@ router.post('/create', adController.createAd);
  *   get:
  *     tags: [광고]
  *     summary: 광고 조회 API
- *     description: 특정 게시글에 대해 현재 진행 중(running)인 광고 중 랜덤으로 하나 반환합니다.
+ *     description: 특정 게시글에 대해 현재 진행 중인 광고 중 랜덤으로 하나 반환합니다.
  *     parameters:
  *       - in: path
  *         name: post_id

@@ -4,7 +4,10 @@ const User = require('../models/User');
 const { Op } = require('sequelize');
 const crypto = require('crypto');
 
-// Helper: 동적으로 광고 상태를 계산하는 함수
+// Helper: 광고 상태를 동적으로 계산하는 함수
+// today < start_date : "upcoming"
+// start_date <= today <= end_date : "running"
+// today > end_date : "ended"
 const computeAdStatus = (ad) => {
   const today = new Date();
   const start = new Date(ad.start_date);
@@ -14,15 +17,24 @@ const computeAdStatus = (ad) => {
   else return "running";
 };
 
-// 광고 등록 API  
-// ad_content는 S3 연동 후 전달된 이미지 URL을 담는다고 가정합니다.
+// 광고 등록 API (S3 업로드된 이미지 URL 사용)
+// 클라이언트는 multipart/form-data 형식으로 ad_image 파일을 전송합니다.
 exports.createAd = async (req, res) => {
   try {
-    const { ad_title, ad_content, start_date, end_date, user_id, ad_price } = req.body;
+    const { ad_title, start_date, end_date, user_id, ad_price } = req.body;
+    
+    // 사용자 존재 여부 확인
     const user = await User.findByPk(user_id);
     if (!user) {
       return res.status(400).json({ message: 'Invalid user_id. User does not exist.' });
     }
+    
+    // S3 업로드 결과에서 이미지 URL 획득 (multer-s3가 req.file.location에 URL을 저장)
+    const ad_content = req.file ? req.file.location : null;
+    if (!ad_content) {
+      return res.status(400).json({ message: 'Image upload failed.' });
+    }
+    
     const ad = await Ad.create({
       ad_title,
       ad_content,
@@ -37,8 +49,7 @@ exports.createAd = async (req, res) => {
   }
 };
 
-// 광고 조회 API (특정 post_id에 대해 랜덤으로 반환)
-// 단, 현재 날짜가 시작일과 종료일 사이인 광고들 중에서 선택
+// 광고 조회 API (특정 post_id에 대해 현재 진행 중인 광고 중 랜덤 반환)
 exports.readAd = async (req, res) => {
   try {
     const post_id = req.params.post_id;
@@ -99,7 +110,7 @@ exports.clickAd = async (req, res) => {
   }
 };
 
-// 광고 정보 조회 API: 동적으로 상태를 계산하여 반환
+// 광고 정보 조회 API (동적 상태 포함)
 exports.viewAd = async (req, res) => {
   try {
     const ad_id = req.params.ad_id;
@@ -115,14 +126,15 @@ exports.viewAd = async (req, res) => {
   }
 };
 
-// 신규: 특정 user_id가 등록한 광고 모두 조회 API
+// 특정 사용자가 등록한 광고 조회 API
 exports.getAdsByUser = async (req, res) => {
   try {
     const user_id = req.params.user_id;
     const ads = await Ad.findAll({ where: { user_id } });
-    const adsWithStatus = ads.map(ad => {
-      return { ...ad.toJSON(), status: computeAdStatus(ad) };
-    });
+    const adsWithStatus = ads.map(ad => ({
+      ...ad.toJSON(),
+      status: computeAdStatus(ad)
+    }));
     res.json(adsWithStatus);
   } catch (error) {
     res.status(500).json({ error: error.message });
