@@ -57,7 +57,7 @@ const AdvertiseInputPreview = ({ step, onRegister, adTitle, adContent, setAdTitl
           <PreviewText>
             <h2>{adTitle}</h2>
             <br/>
-            {adContent && (
+            {adfile && (
               <img 
                 src={adfile} 
                 alt="광고 미리보기" 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   AdWrapper,
   ArticleContainer,
@@ -9,11 +10,17 @@ import {
 } from "./article.style";
 import ArticleContentComponent from "./content/article-content";
 import CommentListComponent from "./comment-list/comment-list";
+import useUserStore from '../../store/auth';
+
 import { Link } from "react-router-dom";
-import { $api } from "../../utils/axios";
+import { $api } from '../../utils/axios';
+
 
 const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }) => {
   const [ad, setAd] = useState(null);
+  const { user, setUser } = useUserStore();
+  const navigate = useNavigate();
+
   console.log('ArticleComponent', articleId);
   
 
@@ -33,6 +40,22 @@ const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }
       console.error(e);
     }
   };
+
+  const handleClickAdvertise = async (id) => {
+    console.log( id);
+    console.log( articleId);
+    console.log( user);
+    try {
+          const res = await $api.post(`/ads/${id}/click`, {
+            post_id: articleId,
+            user_id: user
+          });
+          navigate(`/advertise/${id}`);
+        }
+        catch (err) {   console.error(err);}
+    if (!ad) return;
+    
+  }
 
   return (
     <ArticleContainer>
@@ -72,7 +95,7 @@ const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }
       />
       <CommentListComponent articleId={articleId} />
       {ad ? (
-        <a href='https://www.google.com'><AdWrapper isBorder={!ad}>
+        <a href='https://www.google.com' onClick={() => handleClickAdvertise(ad.id)}><AdWrapper isBorder={!ad}>
           <img src={ad.ad_content} alt="ad" />
         </AdWrapper></a>
       ) : (
