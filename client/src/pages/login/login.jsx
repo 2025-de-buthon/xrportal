@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputComponent from '../../components/input/input';
 import MainLayout from "../../layouts/main";
-
 import useUserStore from '../../store/auth';
-
-import axios from 'axios';
+import { $api } from '../../utils/axios';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,20 +19,18 @@ const LoginPage = () => {
         return;
       }
 
-      const res = await axios.post('http://localhost:3000/users/login', {
+      const res = await $api.post('users/login', {
         user_email: email,
         user_pw: password
       });
 
-      if (res.status === 200) {
-        setUser(res.data.user.id);
+      if (res.status === 200 || res.status === 201) {
+        setUser(res.data.user);
         localStorage.setItem('userId', res.data.user.id);
-        alert('로그인 성공');
         navigate('/');
       }
     } catch (err) {
       console.log(err);
-      alert('로그인 실패');
     }
   };
 

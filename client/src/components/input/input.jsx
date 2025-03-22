@@ -21,15 +21,17 @@ const InputComponent = ({ inputTitle, inputs, buttonLabel, onSubmit  }) => {
     <Wrapper>
       <Title>{inputTitle}</Title>
 
-      {inputs.map(({ inputLabel, placeholder, inputId }) => (
-        <div className='inputContainer' key={inputId}>
+      {inputs.map(({ inputLabel, placeholder, inputId, value, onChange }) => (
+        <div className="inputContainer" key={inputId}>
           <Label htmlFor={inputId}>{inputLabel}</Label>
           <InputBox>
             <InputField
               id={inputId}
               placeholder={placeholder}
               name={inputId}
-              type={inputId === 'password' ? 'password' : 'text'}
+              type={inputId === "password" ? "password" : "text"}
+              value={value}
+              onChange={onChange}
             />
           </InputBox>
         </div>

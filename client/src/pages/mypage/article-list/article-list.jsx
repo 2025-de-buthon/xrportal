@@ -9,24 +9,9 @@ import {
 import ArticleItemComponent from "../../../components/article-item/article-item";
 import useUserStore from "../../../store/auth";
 import { Link } from 'react-router-dom';
+import { $api } from '../../../utils/axios';
 
-const ARTICLE = [
-  {
-    id: 1,
-    post_title: "asdasddasdas",
-    post_content: "content",
-    writer_id: "1",
-    owner_id: "1",
-    price: 20,
-    gas_fee: 0.001,
-    view_count: 10,
-    createdAt: "2025-03-22",
-    sale_status: false,
-    likeCount: 4,
-    owner_name: "김지민",
-    writer_name: "김겸",
-  },
-];
+
 
 const MyArticleListPage = () => {
   const [articleType, setArticleType] = useState("OWNED");
@@ -36,8 +21,23 @@ const MyArticleListPage = () => {
   useEffect(() => {
     if (!user) return;
 
-    setArticleList(ARTICLE);
-  }, [articleType]);
+    fetchMyArticleList();
+  }, [articleType, user]);
+
+  const fetchMyArticleList = async () => {
+    try {
+      const response = await $api.get(
+        `/posts/all?sort=${articleType}`
+      );
+      if (response.data) {
+        setArticleList(response.data);
+      } else {
+        setArticleList([]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <MainLayout isSidebar={true} width={1024}>
