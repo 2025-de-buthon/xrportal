@@ -43,6 +43,11 @@ function App() {
             <HistoryPage />
           </ProtectedRoute>
         } />
+        <Route path="/my/advertisements" element={
+          <ProtectedRoute>
+            <HistoryPage />
+          </ProtectedRoute>
+        } />
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/create/article" element={
           <ProtectedRoute>

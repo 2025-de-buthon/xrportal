@@ -5,3 +5,7 @@ html, * {
 
   font-family: 'Inter', sans-serif;
 }
+
+a:-webkit-any-link {
+  text-decoration: none;
+}

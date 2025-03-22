@@ -20,8 +20,8 @@ export const SidebarContainer = styled.ul`
 
 export const SidebarItem = styled.li`
   width: 100%;
-  color: #DDD;
-  font-size: 12px;
+  color: ${props => props.isFocus ? '#7B43E6' : '#DDD'};
+  font-size: 14px;
   border-radius: 6px;
   padding: 12px;
   cursor: pointer;
@@ -29,4 +29,11 @@ export const SidebarItem = styled.li`
   &:hover {
     background-color: #222222;
   }
+`
+
+export const LoginText = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  color: #8000FF;
+  text-decoration: none;
 `

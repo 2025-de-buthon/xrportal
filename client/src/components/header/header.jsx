@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   HeaderBtn,
   HeaderContainer,
@@ -7,12 +7,19 @@ import {
   HeaderWrapper,
   Logo,
 } from "./header.style";
-import { isLogin } from "../../utils/auth";
 import { Link } from "react-router-dom";
 import LogoImg from "../../assets/logo.png";
+import useUserStore from "../../store/auth";
 
 const HeaderComponenet = () => {
-  const isLoggedIn = isLogin();
+  const { user, setUser } = useUserStore();
+
+  useEffect(() => {
+    if (localStorage.getItem("userId")) setUser("asdsa");
+    else {
+      setUser(null);
+    }
+  }, [setUser]);
 
   return (
     <HeaderWrapper>
@@ -23,19 +30,27 @@ const HeaderComponenet = () => {
               <img src={LogoImg} width={80} alt="logo" />
             </Logo>
           </Link>
-          <HeaderText to="/">홈</HeaderText>
+          <Link to="/">
+            <HeaderText>홈</HeaderText>
+          </Link>
         </HeaderContentContainer>
 
-        {isLoggedIn ? (
+        {user ? (
           <HeaderContentContainer>
             <Link to="/my/articles">
-              <HeaderText>MyPage</HeaderText>
+              <HeaderText >
+                MyPage
+              </HeaderText>
             </Link>
             <Link to="/create/article">
-              <HeaderBtn>게시글 작성</HeaderBtn>
+              <HeaderBtn>
+                게시글 작성
+              </HeaderBtn>
             </Link>
-            <Link to='/advertise/create'>
-              <HeaderBtn>광고 게시</HeaderBtn>
+            <Link to="/advertise/create">
+              <HeaderBtn>
+                광고 게시
+              </HeaderBtn>
             </Link>
           </HeaderContentContainer>
         ) : (
