@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       {
-        tableName: 'ADVERTISEMENT',
+        tableName: 'AD',
         timestamps: true, // createdAt, updatedAt 자동 관리
       }
     );
