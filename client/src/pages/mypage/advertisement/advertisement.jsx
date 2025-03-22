@@ -6,7 +6,6 @@ import {
   ListContainer,
   Wrapper,
 } from "./advertisement.style";
-import ArticleItemComponent from "../../../components/article-item/article-item";
 import AdvertisementItemComponent from "../../../components/advertisement-item/advertisement-item";
 import { Link } from 'react-router-dom';
 

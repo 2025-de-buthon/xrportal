@@ -4,27 +4,24 @@ import {
   ArticleLeftContent,
   ArticleRightContent,
   CountText,
-  IconBtn,
   ProfileInfoContainer,
 } from "./article-item.style";
-import MoreIcon from "../../assets/more-icon";
-import ArrowIcon from "../../assets/arrow-icon";
 
 const ArticleItemComponent = ({ article }) => {
   return (
     <ArticleItemContainer>
       <ArticleLeftContent>
-        <span>{article.title}</span>
+        <span>{article.post_title}</span>
         <ProfileInfoContainer>
           <img src="" alt="profile"></img>
-          <span>{article.userName}</span>
+          <span>{article.writer_name}</span>
           <span>{article.createdAt}</span>
         </ProfileInfoContainer>
       </ArticleLeftContent>
       <ArticleRightContent>
-        <CountText>👁 {article.viewCount}</CountText>
+        <CountText>👁 {article.view_count}</CountText>
         <CountText>👍🏼 {article.likeCount}</CountText>
-        <CountText isAmount={true}>{article.amount} XRP</CountText>
+        <CountText isAmount={true}>{article.price} XRP</CountText>
       </ArticleRightContent>
     </ArticleItemContainer>
   );

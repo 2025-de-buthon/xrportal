@@ -8,8 +8,10 @@ import TransactionComponent from "../../components/transaction/transaction";
 import MintModal from "../../components/modal/mint-modal/mint-modal";
 import { $api } from "../../utils/axios";
 import NotFoundComponent from "../../components/not-found/not-found";
+import useUserStore from "../../store/auth";
 
 const ARTICLE = {
+  id: 1,
   post_title: "asdasddasdas",
   post_content: "content",
   writer_id: "1",
@@ -17,14 +19,17 @@ const ARTICLE = {
   price: 20,
   gas_fee: 0.001,
   view_count: 10,
-  createdAt: "2025-03-22",
+  createdAt: "2025-03-12",
   sale_status: false,
-  like_count: 4
+  likeCount: 4,
+  owner_name: "김지민",
+  writer_name: "김겸",
 };
 
 const ArticlePage = () => {
   const [isMintModalOpen, setIsMintModalOpen] = useState(false);
   const [article, setArticle] = useState(null);
+  const { user } = useUserStore();
   const { id } = useParams();
 
   useEffect(() => {
@@ -34,14 +39,28 @@ const ArticlePage = () => {
   }, [id]);
 
   const fetchArticle = async (id) => {
-    try{
+    try {
       const response = await $api.get(`/posts/${id}/read`);
 
       if (response.data) {
         setArticle(response.data);
       }
-    } catch(e) {
+    } catch (e) {
       setArticle(ARTICLE);
+    }
+  };
+
+  const onClickLike = async (id) => {
+    if (!id && !user) return;
+
+    try {
+      const _ = await $api.post(`/comments/${id}/likes`, {
+        user_id: user.id,
+      });
+
+      fetchArticle();
+    } catch (e) {
+      console.error("like post error");
     }
   };
 
@@ -54,9 +73,13 @@ const ArticlePage = () => {
       {isMintModalOpen && <MintModal closeMintModal={closeMintModal} />}
       {article ? (
         <ArticlePageWrapper>
-          <ArticleComponent article={article} setIsMintModalOpen={setIsMintModalOpen} />
-          <ArticleProfile />
-          <TransactionComponent />
+          <ArticleComponent
+            article={article}
+            setIsMintModalOpen={setIsMintModalOpen}
+            onClickLike={onClickLike}
+          />
+          <ArticleProfile article={article} />
+          <TransactionComponent article={article}/>
         </ArticlePageWrapper>
       ) : (
         <NotFoundComponent />

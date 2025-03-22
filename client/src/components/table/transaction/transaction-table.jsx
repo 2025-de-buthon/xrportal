@@ -1,27 +1,6 @@
 import React from 'react';
 import { TableRow, TransactionTableContainer } from './transaction-table.style';
 
-const TRANSACTION_DATA = [
-  {
-    seller: "user1",
-    buyer: "user2",
-    amount: 100,
-    date: "2025-03-25",
-  },
-  {
-    seller: "user1",
-    buyer: "user2",
-    amount: 100,
-    date: "2025-03-25",
-  },
-  {
-    seller: "user1",
-    buyer: "user2",
-    amount: 100,
-    date: "2025-03-25",
-  },
-];
-
 const TransactionTable = ({data}) => {
 
   return (
