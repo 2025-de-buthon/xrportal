@@ -1,5 +1,5 @@
 // AdvertisementInfoComponent.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BackgroundContainer,
   XRPLTitle,
@@ -17,68 +17,76 @@ import {
   Divider,
 } from './AdvertisementInfoComponent.style';
 
-import axios from 'axios' ;
 import { $api } from '../../utils/axios';
 
-const AdvertisementInfoComponent = ( { ad_id } ) => {
+const AdvertisementInfoComponent = ({ ad_id }) => {
+  // 서버에서 받아오는 광고 데이터를 저장할 상태
+  const [advertisementData, setAdvertisementData] = useState(null);
+
   useEffect(() => {
     getAdvertisement();
-    return () => {};
   }, []);
 
-
+  // 광고 정보를 서버에서 GET 요청으로 받아온다
   const getAdvertisement = async () => {
-      const res = await $api.get(`/advertisement/${ad_id}/detail`);
-      console.log(res);
-  }
-  
-
-  // JSON 데이터 (예시)
-  const advertisementData = {
-    title: "XRPL을 활용한 블로그의 미래",
-    overlay: {
-      first: "🚀 XRPL 기반 광고 | 빠르고 저렴한 fwef",
-    },
-    startDate: "2025.03.22",
-    endDate: "2025.04.22",
-    clickCount: "1056",
-    status: "Deployed"
+    try {
+      // 예: /ads/:id/views 경로가 실제 API라면
+      const res = await $api.get(`/ads/${ad_id}/views`);
+      setAdvertisementData(res.data);
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  // 아직 데이터를 받아오지 못했을 때 null guard
+  if (!advertisementData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <BackgroundContainer>
-      <XRPLTitle>{advertisementData.title}</XRPLTitle>
-      
+      {/* 광고 제목(있다면) */}
+      <XRPLTitle>{advertisementData.ad_title}</XRPLTitle>
+
+      {/* 광고 이미지 표시 (ad_content = 이미지 URL) */}
       <OverlayBorder>
         <XRPLOverlayText>
           <div>
-            <span>{advertisementData.overlay.first}</span>
+            {advertisementData.ad_content && (
+              <img 
+                src={advertisementData.ad_content} 
+                alt="광고 이미지" 
+                style={{ maxWidth: '100%', maxHeight: '150px' }}
+              />
+            )}
           </div>
         </XRPLOverlayText>
       </OverlayBorder>
-      
+
+      {/* 시작일, 종료일 */}
       <InfoRow>
         <InfoBlock>
           <Label>시작일</Label>
           <InfoContainer>
-            <InfoText>{advertisementData.startDate}</InfoText>
+            <InfoText>{advertisementData.start_date}</InfoText>
           </InfoContainer>
         </InfoBlock>
         <InfoBlock>
           <Label>종료일</Label>
           <InfoContainer>
-            <InfoText>{advertisementData.endDate}</InfoText>
+            <InfoText>{advertisementData.end_date}</InfoText>
           </InfoContainer>
         </InfoBlock>
       </InfoRow>
-      
+
       <Divider />
-      
+
+      {/* 클릭수, 상태 */}
       <InfoRow>
         <InfoBlock>
           <Label>클릭수</Label>
           <ClickedContainer>
-            <ClickedText>{advertisementData.clickCount}</ClickedText>
+            <ClickedText>{advertisementData.click_count}</ClickedText>
           </ClickedContainer>
         </InfoBlock>
         <InfoBlock>
@@ -88,10 +96,11 @@ const AdvertisementInfoComponent = ( { ad_id } ) => {
           </DeployedContainer>
         </InfoBlock>
       </InfoRow>
-      
+
       <Divider />
     </BackgroundContainer>
   );
 };
 
 export default AdvertisementInfoComponent;
+
