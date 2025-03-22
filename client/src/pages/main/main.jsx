@@ -216,6 +216,25 @@ const ARTICLE_LIST = [
 const MainPage = () => {
   const [articleType, setArticlType] = useState("Recent");
 
+  const fetchrticleList = async () => {
+    try {
+      const response = await $api.get(
+        `/posts/all?sort=${ARTICLE_TYPE.find((v) => v.key === articleType).value}`
+      );
+      if (response.data) {
+        setArticleList(response.data);
+      } else {
+        setArticleList([]);
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  };
+
+  useEffect(() => {
+    fetchrticleList();
+  }, [articleType]);
+
   return (
     <>
       <MainLayout isSidebar={true}>

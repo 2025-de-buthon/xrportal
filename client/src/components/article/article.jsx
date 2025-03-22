@@ -9,8 +9,26 @@ import {
 import ArticleContentComponent from "./content/article-content";
 import CommentListComponent from "./comment-list/comment-list";
 
-const ArticleComponent = ({ setIsMintModalOpen }) => {
-  
+const ArticleComponent = ({ setIsMintModalOpen, article, onClickLike }) => {
+  const [ad, setAd] = useState(null);
+
+  useEffect(() => {
+    if (!article && !article.id) return;
+
+    fetchAd(article.id);
+  }, [article.id]);
+
+  const fetchAd = async (id) => {
+    try {
+      const response = await $api.get(`/ads/${id}/read`);
+      if (response.data) {
+        setAd(response.data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <ArticleContainer>
       <ArticleHeader>

@@ -92,7 +92,7 @@ export const MintingInputContainer = styled.div`
     font-weight: bold;
   }
 
-  input {
+  span {
     padding: 14px;
     border-radius: 8px;
     border: 1px solid #555555;

@@ -23,18 +23,58 @@ const ArticlePage = () => {
   const [isMintModalOpen, setIsMintModalOpen] = useState(false);
   const { id } = useParams();
 
+  useEffect(() => {
+    if (!id) return;
+
+    fetchArticle(id);
+  }, [id]);
+
+  const fetchArticle = async (id) => {
+    try {
+      const response = await $api.get(`/posts/${id}/read`);
+
+      if (response.data) {
+        setArticle(response.data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onClickLike = async (id) => {
+    if (!id && !user) return;
+
+    try {
+      const _ = await $api.post(`/comments/${id}/likes`, {
+        user_id: user.id,
+      });
+
+      fetchArticle();
+    } catch (e) {
+      console.error("like post error");
+    }
+  };
+
   const closeMintModal = () => {
     setIsMintModalOpen(false)
   }
 
   return (
     <MainLayout isSidebar={false} width={800}>
-      {isMintModalOpen && <MintModal closeMintModal={closeMintModal}/>}
-      <ArticlePageWrapper>
-        <ArticleComponent setIsMintModalOpen={setIsMintModalOpen} />
-        <ArticleProfile />
-        <TransactionComponent />
-      </ArticlePageWrapper>
+      {isMintModalOpen && <MintModal closeMintModal={closeMintModal} />}
+      {article ? (
+        <ArticlePageWrapper>
+          <ArticleComponent
+            article={article}
+            setIsMintModalOpen={setIsMintModalOpen}
+            onClickLike={onClickLike}
+          />
+          <ArticleProfile article={article} />
+          <TransactionComponent articleId={article.id}/>
+        </ArticlePageWrapper>
+      ) : (
+        <NotFoundComponent />
+      )}
     </MainLayout>
   );
 };

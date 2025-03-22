@@ -6,19 +6,40 @@ import {
   HeaderWrapper,
   Wrapper,
 } from "./advertisement.style";
-import ArticleItemComponent from "../../../components/article-item/article-item";
+import AdvertisementItemComponent from "../../../components/advertisement-item/advertisement-item";
+import { Link } from "react-router-dom";
+import useUserStore from "../../../store/auth";
+import { $api } from "../../../utils/axios";
 
-const ADVERTISEMENT_LIST = [
-  {
-    id: 1,
-    title: "게시글 1",
-    content: "게시글 1",
-    createdAt: "2025-03-22",
-  }
-];
+const ADVERTISEMENT_TYPE = ["ALL", "ACTIVE", "DEACTIVE"];
 
 const MyAdvertisementPage = () => {
-  const [articleType, setArticleType] = useState("OWNED");
+  // ACTIVE, DEACTIVE, ALL
+  const [advertisementType, setAdvertisementType] = useState("ALL");
+  const [advertisementList, setAdvertisementList] = useState([]);
+  const { user } = useUserStore();
+
+  useEffect(() => {
+    if (!user && !user.id) return;
+
+    fetchAds(user.id);
+  }, [user]);
+
+  const fetchAds = async (userId) => {
+    try {
+      const response = await $api.get(`/ads/user/${userId}`);
+
+      if (response.data) {
+        setAdvertisementList(
+          response.data.filter((v) =>
+            advertisementType === "ALL" ? true : v.status === advertisementType
+          )
+        );
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <MainLayout isSidebar={true} width={1024}>

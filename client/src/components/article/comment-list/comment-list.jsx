@@ -12,27 +12,11 @@ import {
 const COMMENTS = [
   {
     id: 1,
-    name: "asdaasd",
-    userId: "0x1238581",
-    comment: "사용자1: 좋은 정보 감사합니다!",
-    createdAt: "2025년 3월 25일",
-    likeCount: 7,
-  },
-  {
-    id: 2,
-    name: "asdaasd",
-    userId: "0x12385810x12385810x12385810x1238581",
-    comment: "사용자1: 좋은 정보 감사합니다!",
-    createdAt: "2025년 3월 25일",
-    likeCount: 7,
-  },
-  {
-    id: 3,
-    name: "asdaasd",
-    userId: "0x1238581",
-    comment: "사용자1: 좋은 정보 감사합니다!",
-    createdAt: "2025년 3월 25일",
-    likeCount: 7,
+    post_id: 1,
+    user_id: 1,
+    comment_content: "content",
+    createdAt: "2025-03-12",
+    likeCount: 190,
   },
 ];
 
@@ -59,7 +43,45 @@ const CommentItem = ({ comment }) => {
   );
 };
 
-const CommentListComponent = () => {
+const CommentListComponent = ({ articleId }) => {
+  const { user } = useUserStore();
+  const [comments, setComments] = useState([]);
+  const [commentInputValue, setCommentInputValue] = useState('');
+
+  useEffect(() => {
+    if (!articleId) return;
+    fetchComments(articleId);
+  }, [articleId]);
+
+  const fetchComments = async (id) => {
+    try {
+      const response = await $api.get(`/comments/${id}/read`);
+      if (response.data) {
+        setComments(response.data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onSubmitComment = async (e)=> {
+    e.preventDefault();
+    
+    if(!commentInputValue && !user && !articleId) return;
+
+    try {
+      const _ = await $api.post('/comments/create', {
+        post_id: articleId,
+        user_id: user.id,
+        comment_content: commentInputValue
+      })
+
+      fetchComments();
+    } catch(e) {
+      console.error('failed to comment submit')
+    }
+  }
+
   return (
     <CommentWrapper>
       <CommentInputForm>
