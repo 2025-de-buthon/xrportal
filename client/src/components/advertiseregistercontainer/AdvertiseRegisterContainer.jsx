@@ -7,6 +7,7 @@ import AdvertiseFee from './AdvertiseFee';
 import axios from 'axios';
 
 import useUserStore from '../../store/auth';
+import { $api } from '../../utils/axios';
 
 
 const AdvertiseRegisterContainer = () => {
@@ -78,7 +79,7 @@ const AdvertiseRegisterContainer = () => {
     formData.append('ad_price', estimatedTokens);
     formData.append('ad_image', adContent);
   
-    axios.post('http://localhost:3000/ads/create', formData, {
+    $api.post('/ads/create', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

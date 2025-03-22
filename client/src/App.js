@@ -17,6 +17,9 @@ import AdvertisementDetailPage from './pages/avertisement/AdvertisementDetailPag
 import AdvertiseRegisterPage from './pages/advertiseregister/AdvertiseRegisterPage';
 import SellArticlePage from './pages/sell-articles/sell-article';
 import MyAdvertisementPage from './pages/mypage/advertisement/advertisement';
+import { useEffect } from 'react';
+import useUserStore from './store/auth';
+import { $api } from './utils/axios';
 
 
 
@@ -29,7 +32,28 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const { user, setUser } = useUserStore();
+  const userId = localStorage.getItem("userId");
 
+  useEffect(() => {
+    if (userId) {
+      fetchUser(userId);
+    }
+    else {
+      setUser(null);
+    }
+  }, [userId, setUser]);
+
+  const fetchUser = async (id) => {
+    try {
+      const res = await $api.get(`/users/me/?user_id=${id}`);
+      if (res.status === 200) {
+        setUser(res.data.user);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <BrowserRouter>

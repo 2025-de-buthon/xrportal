@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import InputComponent from '../../components/input/input';
 import MainLayout from "../../layouts/main";
 import axios from 'axios';
+import { $api } from '../../utils/axios';
 
 const SingUpPage = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const SingUpPage = () => {
     }
 
     // 회원가입 요청
-    const res = await axios.post('http://localhost:3000/users/signup', {
+    const res = await $api.post('/users/signup', {
       user_name: name,
       user_email: email,
       user_pw: password,
@@ -29,7 +30,7 @@ const SingUpPage = () => {
       user_token_balance : 0
     })
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       alert('회원가입 성공');
       navigate('/login'); // 회원가입 후 로그인 페이지로 이동
     } else {

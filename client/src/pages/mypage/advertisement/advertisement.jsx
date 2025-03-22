@@ -20,10 +20,10 @@ const MyAdvertisementPage = () => {
   const { user } = useUserStore();
 
   useEffect(() => {
-    if (!user && !user.id) return;
+    if (!user || !user.id) return;
 
     fetchAds(user.id);
-  }, [user]);
+  }, [user, advertisementType]);
 
   const fetchAds = async (userId) => {
     try {

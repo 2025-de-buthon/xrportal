@@ -18,6 +18,7 @@ import {
 } from './AdvertisementInfoComponent.style';
 
 import axios from 'axios' ;
+import { $api } from '../../utils/axios';
 
 const AdvertisementInfoComponent = ( { ad_id } ) => {
   useEffect(() => {
@@ -27,7 +28,7 @@ const AdvertisementInfoComponent = ( { ad_id } ) => {
 
 
   const getAdvertisement = async () => {
-      const res = await axios.get(`http://localhost:3000/advertisement/${ad_id}/detail`);
+      const res = await $api.get(`/advertisement/${ad_id}/detail`);
       console.log(res);
   }
   

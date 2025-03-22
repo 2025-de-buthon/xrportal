@@ -12,14 +12,7 @@ import LogoImg from "../../assets/logo.png";
 import useUserStore from "../../store/auth";
 
 const HeaderComponenet = () => {
-  const { user, setUser } = useUserStore();
-
-  useEffect(() => {
-    if (localStorage.getItem("userId")) setUser("asdsa");
-    else {
-      setUser(null);
-    }
-  }, [setUser]);
+  const { user } = useUserStore();
 
   return (
     <HeaderWrapper>
@@ -38,19 +31,13 @@ const HeaderComponenet = () => {
         {user ? (
           <HeaderContentContainer>
             <Link to="/my/articles">
-              <HeaderText >
-                MyPage
-              </HeaderText>
+              <HeaderText>MyPage</HeaderText>
             </Link>
             <Link to="/create/article">
-              <HeaderBtn>
-                게시글 작성
-              </HeaderBtn>
+              <HeaderBtn>게시글 작성</HeaderBtn>
             </Link>
             <Link to="/advertise/create">
-              <HeaderBtn>
-                광고 게시
-              </HeaderBtn>
+              <HeaderBtn>광고 게시</HeaderBtn>
             </Link>
           </HeaderContentContainer>
         ) : (

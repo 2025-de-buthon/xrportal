@@ -39,7 +39,7 @@ const CreateArticlePage = () => {
       const response = await $api.post("/posts/create", {
         post_title: title,
         post_content: content,
-        gas_fee: gasFee,
+        // gas_fee: gasFee,
         writer_id: user.id,
       });
 
