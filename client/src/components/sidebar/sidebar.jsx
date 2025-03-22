@@ -15,17 +15,17 @@ const SidebarComponent = () => {
         <SidebarContainer>
           <Link to="/my/articles">
             <SidebarItem isFocus={location.pathname === "/my/articles"}>
-              📄  Entries
-            </SidebarItem>
-          </Link>
-          <Link to="/my/history">
-            <SidebarItem isFocus={location.pathname === "/my/history"}>
-              📢  advertisements
+              📄 Entries
             </SidebarItem>
           </Link>
           <Link to="/my/advertisements">
             <SidebarItem isFocus={location.pathname === "/my/advertisements"}>
-              🕜  History
+              📢 advertisements
+            </SidebarItem>
+          </Link>
+          <Link to="/my/history">
+            <SidebarItem isFocus={location.pathname === "/my/history"}>
+              🕜 History
             </SidebarItem>
           </Link>
         </SidebarContainer>

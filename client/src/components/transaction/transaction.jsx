@@ -52,7 +52,7 @@ const TransactionComponent = ({ articleId }) => {
   return (
     <TransactionContainer>
       <h2>Transcation</h2>
-      <TransactionTable />
+      <TransactionTable data={transactionList} />
     </TransactionContainer>
   );
 };

@@ -79,7 +79,7 @@ const ArticlePage = () => {
             onClickLike={onClickLike}
           />
           <ArticleProfile article={article} />
-          <TransactionComponent article={article}/>
+          <TransactionComponent articleId={article.id}/>
         </ArticlePageWrapper>
       ) : (
         <NotFoundComponent />

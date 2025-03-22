@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../../../layouts/main";
 import {
   ArticleListContainer,
@@ -7,51 +7,37 @@ import {
   Wrapper,
 } from "./article-list.style";
 import ArticleItemComponent from "../../../components/article-item/article-item";
+import useUserStore from "../../../store/auth";
+import { Link } from 'react-router-dom';
 
-const OWNED_ARTICLE_LIST = [
+const ARTICLE = [
   {
     id: 1,
-    title: "게시글 1",
-    content: "게시글 1",
+    post_title: "asdasddasdas",
+    post_content: "content",
+    writer_id: "1",
+    owner_id: "1",
+    price: 20,
+    gas_fee: 0.001,
+    view_count: 10,
     createdAt: "2025-03-22",
-  },
-  {
-    id: 2,
-    title: "게시글 2",
-    content: "게시글 2",
-    createdAt: "2025-03-22",
-  },
-  {
-    id: 3,
-    title: "게시글 3",
-    content: "게시글 3",
-    createdAt: "2025-03-22",
-  },
-];
-
-const CREATED_ARTICLE_LIST = [
-  {
-    id: 1,
-    title: "생성 게시글 1",
-    content: "생성게시글 1",
-    createdAt: "2025-03-22",
-  },
-  {
-    id: 2,
-    title: "생성 게시글 2",
-    content: "생성 게시글 2",
-    createdAt: "2025-03-22",
-  },
-  {
-    id: 3,
-    title: "생성 게시글 3",
-    content: "생성 게시글 3",
-    createdAt: "2025-03-22",
+    sale_status: false,
+    likeCount: 4,
+    owner_name: "김지민",
+    writer_name: "김겸",
   },
 ];
 
 const MyArticleListPage = () => {
   const [articleType, setArticleType] = useState("OWNED");
+  const [articleList, setArticleList] = useState([]);
+  const { user } = useUserStore();
+
+  useEffect(() => {
+    if (!user) return;
+
+    setArticleList(ARTICLE);
+  }, [articleType]);
 
   return (
     <MainLayout isSidebar={true} width={1024}>
@@ -71,14 +57,11 @@ const MyArticleListPage = () => {
           </HeaderContent>
         </HeaderWrapper>
         <ArticleListContainer>
-          {articleType === "CREATED" &&
-            CREATED_ARTICLE_LIST.map((article) => (
+          {articleList.map((article) => (
+            <Link to={`/article/${article.id}`}>
               <ArticleItemComponent key={article.id} article={article} />
-            ))}
-          {articleType === "OWNED" &&
-            OWNED_ARTICLE_LIST.map((article) => (
-              <ArticleItemComponent key={article.id} article={article} />
-            ))}
+            </Link>
+          ))}
         </ArticleListContainer>
       </Wrapper>
     </MainLayout>
