@@ -31,13 +31,12 @@ function App() {
 
   return (
     <BrowserRouter>
-     <Routes>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/my/articles" element={<MyArticlesPage />} />
-      <Route path="/my/history" element={<HistoryPage />} />
-      <Route path="/article/:id" element={<ArticlePage />} />
-      <Route path="/create/article" element={<CreateArticlePage />} />
-     </Routes>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/my/articles" element={<MyArticlesPage />} />
+        <Route path="/my/history" element={<HistoryPage />} />
+        <Route path="/article/:id" element={<ArticlePage />} />
+        <Route path="/create/article" element={<CreateArticlePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SingUpPage />} />
         <Route path="/advertise/:id" element={<AdvertisementDetailPage />} />
@@ -56,6 +55,7 @@ function App() {
             <WalletGenPage />
           </ProtectedRoute>
         } />
+      </Routes>
     </BrowserRouter>
   );
 }

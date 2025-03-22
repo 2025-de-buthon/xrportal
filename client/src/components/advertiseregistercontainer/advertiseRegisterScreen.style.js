@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
 
 export const Title = styled.div`
   color: #ffffff;
-  font-family: "Inter";
+  
   font-size: 24px;
   font-weight: 700;
   line-height: 29px;
@@ -35,7 +35,7 @@ export const InputBox = styled.div`
 
 export const InputPlaceholder = styled.input`
   color: #dddddd;
-  font-family: "Inter";
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;
@@ -62,7 +62,7 @@ export const TextareaBox = styled.div`
 
 export const TextareaPlaceholder = styled.textarea`
   color: #dddddd;
-  font-family: "Inter";
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;
@@ -93,7 +93,7 @@ export const ButtonWrapper = styled.button`
 
 export const ButtonText = styled.div`
   color: #ffffff;
-  font-family: "Inter";
+  
   font-size: 18px;
   line-height: 22px;
   font-weight: 700;
@@ -102,7 +102,7 @@ export const ButtonText = styled.div`
 
 export const SectionTitle = styled.div`
   color: #ffffff;
-  font-family: "Inter";
+  
   font-size: 24px;
   font-weight: 700;
   line-height: 29px;
@@ -118,7 +118,7 @@ export const InputRow = styled.div`
 
 export const Label = styled.div`
   color: #dddddd;
-  font-family: "Inter";
+  
   font-size: 16px;
   font-weight: 400;
   line-height: 19px;
@@ -139,7 +139,7 @@ export const EstimatedBox = styled.div`
 
 export const EstimatedText = styled.div`
   color: #888888;
-  font-family: "Inter";
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;
@@ -147,7 +147,7 @@ export const EstimatedText = styled.div`
 
 export const TokenUnit = styled.div`
   color: #7B43E6;
-  font-family: "Inter";
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;
@@ -169,7 +169,7 @@ export const PreviewText = styled.div`
   width: 312.68px;
   height: 17px;
   color: #dddddd;
-  font-family: "Inter";
+  
   font-size: 15.63px;
   line-height: 19px;
   font-weight: 400;
@@ -185,7 +185,7 @@ export const PreviewText = styled.div`
 // 날짜 입력 전용 컴포넌트 (InputPlaceholder와 스타일 동일하게 사용 가능)
 export const DateInput = styled.input`
   color: #888888;
-  font-family: "Inter";
+  
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;

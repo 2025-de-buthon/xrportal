@@ -14,7 +14,7 @@ export const MainLayoutWrapper = styled.section`
 
 export const MainContentWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${props => props.isSidebar ? 'space-between' : 'center'};
   align-items: flex-start;
   width: ${props => props.width}px;
   column-gap: 40px;
