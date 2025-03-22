@@ -8,10 +8,8 @@ import {
 } from "./article-list.style";
 import ArticleItemComponent from "../../../components/article-item/article-item";
 import useUserStore from "../../../store/auth";
-import { Link } from 'react-router-dom';
-import { $api } from '../../../utils/axios';
-
-
+import { Link } from "react-router-dom";
+import { $api } from "../../../utils/axios";
 
 const MyArticleListPage = () => {
   const [articleType, setArticleType] = useState("OWNED");
@@ -26,11 +24,13 @@ const MyArticleListPage = () => {
 
   const fetchMyArticleList = async () => {
     try {
-      const response = await $api.get(
-        `/posts/all?sort=${articleType}`
-      );
+      const response = await $api.get(`/posts/user/${user.id}`);
       if (response.data) {
-        setArticleList(response.data);
+        if (articleType === "OWNED") {
+          setArticleList(response.data.filter(v => v.owner_id === user.id));
+        } else if (articleType === "CREATED") {
+          setArticleList(response.data.filter(v => v.writer_id === user.id));
+        }
       } else {
         setArticleList([]);
       }
