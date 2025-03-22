@@ -4,16 +4,38 @@ import { useNavigate } from 'react-router-dom';
 import InputComponent from '../../components/input/input';
 import MainLayout from "../../layouts/main";
 
+import useUserStore from '../../store/auth';
+
+import axios from 'axios';
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { user, setUser } = useUserStore();
 
-  const handleLogin = () => {
-    // 서버 요청 부분은 생략하고, 로그인 성공 시 dummy token 저장
-    localStorage.setItem('token', 'dummy-token');
-    alert('로그인 성공');
-    navigate('/'); // 로그인 후 메인 페이지로 이동
+  const handleLogin = async () => {
+    try {
+      if (!email || !password) {
+        alert('이메일과 비밀번호를 입력해주세요');
+        return;
+      }
+
+      const res = await axios.post('http://localhost:3000/users/login', {
+        user_email: email,
+        user_pw: password
+      });
+
+      if (res.status === 200) {
+        setUser(res.data.user.id);
+        localStorage.setItem('userId', res.data.user.id);
+        alert('로그인 성공');
+        navigate('/');
+      }
+    } catch (err) {
+      console.log(err);
+      alert('로그인 실패');
+    }
   };
 
   return (

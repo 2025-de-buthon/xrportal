@@ -4,6 +4,11 @@ import { Wrapper } from './advertiseRegisterScreen.style';
 import AdvertiseInputPreview from './AdvertiseInputPreview';
 import AdvertiseFee from './AdvertiseFee';
 
+import axios from 'axios';
+
+import useUserStore from '../../store/auth';
+
+
 const AdvertiseRegisterContainer = () => {
   const [step, setStep] = useState('input'); // 'input' 또는 'fee'
   const [adTitle, setAdTitle] = useState('');
@@ -13,6 +18,10 @@ const AdvertiseRegisterContainer = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [estimatedTokens, setEstimatedTokens] = useState(0);
+
+  // 사용자 아이디
+  const { user, setUser } = useUserStore();
+
 
   // 날짜 차이를 계산하여 토큰 수(1일 당 100토큰)를 반환하는 함수
   const calculateTokens = (start, end) => {
@@ -43,6 +52,45 @@ const AdvertiseRegisterContainer = () => {
     setStep('fee');
   };
 
+  // const handleSubmit = () => {
+  //   axios.post('http://localhost:3000/ads/create', {
+  //     ad_title: adTitle,
+  //     start_date: startDate,
+  //     end_date: endDate,
+  //     user_id: user ,
+  //     ad_price: estimatedTokens,
+  //     ad_image: adContent,
+  //   })
+  //   .then((res) => {
+  //     alert('광고 등록 성공');
+  //   })
+  //   .catch((err) => {
+  //     alert('광고 등록 실패');
+  //   })
+  // }
+  const handleSubmit = () => {
+
+  const formData = new FormData();
+    formData.append('ad_title', adTitle);
+    formData.append('start_date', startDate);
+    formData.append('end_date', endDate);
+    formData.append('user_id', 1);
+    formData.append('ad_price', estimatedTokens);
+    formData.append('ad_image', adContent);
+  
+    axios.post('http://localhost:3000/ads/create', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((res) => {
+      alert('광고 등록 성공');
+    })
+    .catch((err) => {
+      alert('광고 등록 실패');
+    });
+  };
+
   return (
     <Wrapper>
       <AdvertiseInputPreview
@@ -60,6 +108,7 @@ const AdvertiseRegisterContainer = () => {
           estimatedTokens={estimatedTokens}
           onStartDateChange={handleStartDateChange}
           onEndDateChange={handleEndDateChange}
+          handleSubmit={handleSubmit}
         />
       )}
     </Wrapper>

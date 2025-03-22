@@ -20,7 +20,13 @@ const ProfileComponent = () => {
             <span style={{ fontSize: "14px", color: "white" }}>
               Profile Name
             </span>
-            <div style={{display: 'flex', flexDirection: 'column', rowGap: '4px'}}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                rowGap: "4px",
+              }}
+            >
               <span style={{ fontSize: "14px", color: "#8000FF" }}>3 DBT</span>
               <span style={{ fontSize: "14px", color: "#8000FF" }}>3 XRP</span>
             </div>

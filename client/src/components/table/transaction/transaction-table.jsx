@@ -1,34 +1,8 @@
-import React from 'react';
-import { TableRow, TransactionTableContainer } from './transaction-table.style';
+import React from "react";
+import { TableRow, TransactionTableContainer } from "./transaction-table.style";
 
-const TRANSACTION_DATA = [
-  {
-    seller_id: "user1",
-    buyer_id: "user2",
-    post_id: 1,
-    amount: 100,
-    gas_fee: 0,
-    date: "2025-03-25",
-  },
-  {
-    seller_id: "user1",
-    buyer_id: "user2",
-    post_id: 1,
-    amount: 100,
-    gas_fee: 0,
-    date: "2025-03-25",
-  },
-  {
-    seller_id: "user1",
-    buyer_id: "user2",
-    post_id: 1,
-    amount: 100,
-    gas_fee: 0,
-    date: "2025-03-25",
-  },
-];
-
-const TransactionTable = () => {
+const TransactionTable = ({ data }) => {
+  console.log("asd", data);
 
   return (
     <TransactionTableContainer>
@@ -38,10 +12,10 @@ const TransactionTable = () => {
         <span>Amount</span>
         <span>Date</span>
       </TableRow>
-      {TRANSACTION_DATA.map((v, i) => (
+      {data.map((v, i) => (
         <TableRow className="tableBody">
-          <span>{v.seller}</span>
-          <span>{v.buyer}</span>
+          <span>{v.seller_id}</span>
+          <span>{v.buyer_id}</span>
           <span>{v.amount}</span>
           <span>{v.date}</span>
         </TableRow>

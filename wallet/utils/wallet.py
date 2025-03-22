@@ -8,7 +8,7 @@ from xrpl.models.transactions import Payment, TrustSet, OfferCreate
 from xrpl.transaction import autofill, autofill_and_sign, submit_and_wait, XRPLReliableSubmissionException
 from xrpl.models.currencies import IssuedCurrency
 from xrpl.models.transactions.nftoken_mint import NFTokenMint, NFTokenMintFlag
-from xrpl.models.requests import AccountNFTs
+from xrpl.models.requests import AccountNFTs, AccountTx
 from xrpl.models.transactions.nftoken_create_offer import NFTokenCreateOffer, NFTokenCreateOfferFlag
 from xrpl.models.requests import AccountOffers, NFTSellOffers, AccountLines, AccountInfo
 from xrpl.models.transactions.nftoken_accept_offer import NFTokenAcceptOffer
@@ -128,6 +128,53 @@ class XRPLManager:
             taker_pays=taker_pays_dbt
         )
         return self.submit_transaction(self.issuer_wallet, offer_tx)
+
+    def get_transactions_by_address(
+        self,
+        address: str,
+        limit: int = 200,
+        ledger_index_min: int = -1,
+        ledger_index_max: int = -1,
+        forward: bool = False
+    ) -> list:
+        """
+        특정 계정의 트랜잭션 내역을 전부 가져옵니다.
+        
+        :param address: 조회하려는 XRPL 계정 주소
+        :param limit: 한 번의 요청에서 가져올 최대 트랜잭션 개수(기본 200)
+        :param ledger_index_min: 조회 시작 레저 (기본 -1, 즉 "가장 과거"의 레저)
+        :param ledger_index_max: 조회 종료 레저 (기본 -1, 즉 "가장 최근"의 레저)
+        :param forward: True면 오래된 순으로 조회, False면 최신 순으로 조회
+        :return: 트랜잭션 객체(dict)들의 리스트
+        """
+        all_txs = []
+        marker = None
+
+        while True:
+            # AccountTx 요청 생성
+            req = AccountTx(
+                account=address,
+                ledger_index_min=ledger_index_min,
+                ledger_index_max=ledger_index_max,
+                limit=limit,
+                forward=forward,
+                marker=marker
+            )
+            response = self.client.request(req)
+            result = response.result
+
+            # 이번 호출에서 가져온 트랜잭션들
+            transactions_chunk = result.get("transactions", [])
+            all_txs.extend(transactions_chunk)
+
+            # 다음 페이지가 있는지(marker) 확인
+            marker = result.get("marker")
+            if not marker:
+                # 더 이상 다음 페이지가 없으면 반복 종료
+                break
+
+        return all_txs
+
 
     def mint_nft(
         self,

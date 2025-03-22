@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TransactionContainer } from "./transaction.style";
 import TransactionTable from "../table/transaction/transaction-table";
-import { $api } from '../../utils/axios';
+import { $api } from "../../utils/axios";
 
 const TRANSACTION_DATA = [
   {
@@ -34,25 +34,24 @@ const TransactionComponent = ({ articleId }) => {
   const [transactionList, setTransactionList] = useState([]);
 
   useEffect(() => {
-    if(!articleId) return;
+    if (!articleId) return;
 
-    fetchTransaction(articleId)
+    fetchTransaction(articleId);
   }, [articleId]);
 
   const fetchTransaction = async (articleId) => {
     try {
       const response = await $api.get(`/transactions/post/${articleId}`);
-      if(response.data) 
-        setTransactionList(response.data)
-    } catch(e) {
+      if (response.data) setTransactionList(response.data);
+    } catch (e) {
       setTransactionList(TRANSACTION_DATA);
     }
-  }
+  };
 
   return (
     <TransactionContainer>
       <h2>Transcation</h2>
-      <TransactionTable />
+      <TransactionTable data={transactionList} />
     </TransactionContainer>
   );
 };

@@ -18,7 +18,8 @@ const AdvertiseFee = ({
   endDate, 
   estimatedTokens, 
   onStartDateChange, 
-  onEndDateChange 
+  onEndDateChange,
+  handleSubmit
 }) => {
   return (
     <>
@@ -49,10 +50,10 @@ const AdvertiseFee = ({
         <Label>예상 지불 토큰량</Label>
         <EstimatedBox>
           <EstimatedText>{estimatedTokens}</EstimatedText>
-          <TokenUnit>DBT</TokenUnit>
+          <TokenUnit>XRPT</TokenUnit>
         </EstimatedBox>
       </div>
-      <ButtonWrapper>
+      <ButtonWrapper onClick={handleSubmit}>
         <ButtonText>광고 등록</ButtonText>
       </ButtonWrapper>
     </>

@@ -443,6 +443,51 @@ def get_assets_by_address():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@bp.route('/xrpl/get_transactions_by_address', methods=['GET'])
+def api_get_transactions_by_address():
+    """
+    특정 XRPL 주소의 전체 트랜잭션을 조회합니다.
+    예시 호출:
+      GET /xrpl/get_transactions_by_address?address=rXXXXXX&limit=200&forward=false
+    
+    Query Params:
+      - address (필수): 조회할 XRPL 주소
+      - limit (선택): 한 번의 요청에서 가져올 최대 트랜잭션 개수 (default=200)
+      - forward (선택): True면 오래된 순, False면 최신 순 (default=False)
+      - ledger_index_min (선택): 조회 시작 레저 번호 (기본 -1은 '가장 과거')
+      - ledger_index_max (선택): 조회 종료 레저 번호 (기본 -1은 '가장 최근')
+    """
+    address = request.args.get("address")
+    if not address:
+        return jsonify({"error": "address 쿼리 파라미터가 필요합니다."}), 400
+
+    # 선택 파라미터
+    limit = request.args.get("limit", 200, type=int)
+    forward = request.args.get("forward", "false").lower() == "true"
+    ledger_index_min = request.args.get("ledger_index_min", -1, type=int)
+    ledger_index_max = request.args.get("ledger_index_max", -1, type=int)
+
+    try:
+        # XRPLManager 안에 구현된 메서드 호출
+        tx_list = manager.get_transactions_by_address(
+            address=address,
+            limit=limit,
+            ledger_index_min=ledger_index_min,
+            ledger_index_max=ledger_index_max,
+            forward=forward
+        )
+
+        # 각 트랜잭션을 필요한 만큼 가공하거나 그대로 반환 가능
+        # 여기서는 바로 반환
+        return jsonify({
+            "address": address,
+            "total_count": len(tx_list),
+            "transactions": tx_list
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 def monitor_db_and_reward():
     """

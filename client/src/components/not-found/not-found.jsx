@@ -1,5 +1,5 @@
-import React from 'react';
-import { NotFoundWrapper } from './not-found.style';
+import React from "react";
+import { NotFoundWrapper } from "./not-found.style";
 
 const NotFoundComponent = () => {
   return (

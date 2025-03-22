@@ -15,7 +15,6 @@ const OWNER_INFOR = {
 };
 
 const ArticleProfile = ({ article }) => {
-
   const writerInfo = {
     type: "WRITER",
     name: article.writer_name,
