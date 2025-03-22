@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import MainLayout from "../../layouts/main";
 import { ArticlePageWrapper } from "./article.style";
 import ArticleComponent from "../../components/article/article";
 import { useParams } from "react-router-dom";
 import ArticleProfile from "../../components/article-profile/article-profile";
-import TransactionComponent from '../../components/transaction/transaction';
-
+import TransactionComponent from "../../components/transaction/transaction";
+import MintModal from '../../components/modal/mint-modal/mint-modal';
 
 const ARTICLE = {
   id: "1",
@@ -20,14 +20,20 @@ const ARTICLE = {
 };
 
 const ArticlePage = () => {
+  const [isMintModalOpen, setIsMintModalOpen] = useState(false);
   const { id } = useParams();
+
+  const closeMintModal = () => {
+    setIsMintModalOpen(false)
+  }
 
   return (
     <MainLayout isSidebar={false} width={800}>
+      {isMintModalOpen && <MintModal closeMintModal={closeMintModal}/>}
       <ArticlePageWrapper>
-        <ArticleComponent />
+        <ArticleComponent setIsMintModalOpen={setIsMintModalOpen} />
         <ArticleProfile />
-        <TransactionComponent/>
+        <TransactionComponent />
       </ArticlePageWrapper>
     </MainLayout>
   );

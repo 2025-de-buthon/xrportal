@@ -9,7 +9,8 @@ import {
 import ArticleContentComponent from "./content/article-content";
 import CommentListComponent from "./comment-list/comment-list";
 
-const ArticleComponent = () => {
+const ArticleComponent = ({ setIsMintModalOpen }) => {
+  
   return (
     <ArticleContainer>
       <ArticleHeader>
@@ -32,7 +33,7 @@ const ArticleComponent = () => {
           </span>
         </ArticleInfoContainer>
       </ArticleHeader>
-      <ArticleContentComponent />
+      <ArticleContentComponent setIsMintModalOpen={setIsMintModalOpen} />
       <CommentListComponent />
       <AdWrapper>🚀 XRPL 기반 광고 | 빠르고 저렴한 트랜잭션</AdWrapper>
     </ArticleContainer>
