@@ -214,3 +214,31 @@ exports.likePost = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// 특정 사용자의 게시글 조회 API
+// writer_id 또는 owner_id가 주어진 user_id인 모든 게시글을 반환하며, writer와 owner의 이름 포함
+exports.getUserPosts = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    const posts = await Post.findAll({
+      where: {
+        [Op.or]: [
+          { writer_id: user_id },
+          { owner_id: user_id }
+        ]
+      }
+    });
+    const postsWithDetails = await Promise.all(posts.map(async (post) => {
+      const writer = await User.findByPk(post.writer_id);
+      const owner = await User.findByPk(post.owner_id);
+      return { 
+        ...post.toJSON(),
+        writer_name: writer ? writer.user_name : null,
+        owner_name: owner ? owner.user_name : null,
+      };
+    }));
+    res.json(postsWithDetails);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

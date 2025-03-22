@@ -163,4 +163,26 @@ router.post('/:post_id/purchase', postController.purchasePost);
  */
 router.post('/:post_id/like', postController.likePost);
 
+
+// 새로운 API: 특정 사용자의 게시글 조회 (writer_id 또는 owner_id가 user_id)
+ /**
+  * @swagger
+  * /posts/user/{user_id}:
+  *   get:
+  *     tags: [게시글]
+  *     summary: 특정 사용자의 게시글 전체 조회 API
+  *     description: 특정 사용자(user_id)가 작성한 또는 소유한 모든 게시글 정보를 반환합니다.
+  *     parameters:
+  *       - in: path
+  *         name: user_id
+  *         required: true
+  *         schema:
+  *           type: integer
+  *         description: 사용자 ID
+  *     responses:
+  *       200:
+  *         description: 해당 사용자의 게시글 목록 반환
+  */
+ router.get('/user/:user_id', postController.getUserPosts);
+ 
 module.exports = router;
