@@ -16,18 +16,38 @@ export const ArticleItemContainer = styled.div`
 export const ArticleLeftContent = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: 8px;
 
   font-size: 16px;
   color: #DDD;
 `;
 
+export const ProfileInfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+
+  img {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+  }
+
+  span {
+    color: #BBBBBB;
+    font-size: 14px;
+  }
+`
+
 export const ArticleRightContent = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 12px;
+  column-gap: 8px;
 `
 
-export const IconBtn = styled.div`
+export const CountText = styled.div`
   cursor: pointer;
+  font-size: 14px;
+  color: ${props => props.isAmount ? '#28A745' : '#CCCCCC'};
 `

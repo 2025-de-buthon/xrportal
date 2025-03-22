@@ -11,7 +11,6 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 24px;
-
 `
 
 export const HeaderWrapper = styled.header`
@@ -38,7 +37,7 @@ export const HeaderContent = styled.div`
   }
 `;
 
-export const AricleListContainer = styled.div`
+export const ArticleListContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;

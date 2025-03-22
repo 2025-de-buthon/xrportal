@@ -15,9 +15,10 @@ export const MainLayoutWrapper = styled.section`
 export const MainContentWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   width: ${props => props.width}px;
   column-gap: 40px;
+  padding-bottom: 64px;
 `;
 
 export const ContentWrapper = styled.div`

@@ -1,22 +1,30 @@
 import React from "react";
-import { ArticleItemContainer, ArticleLeftContent, ArticleRightContent, IconBtn } from "./article-item.style";
+import {
+  ArticleItemContainer,
+  ArticleLeftContent,
+  ArticleRightContent,
+  CountText,
+  IconBtn,
+  ProfileInfoContainer,
+} from "./article-item.style";
 import MoreIcon from "../../assets/more-icon";
-import ArrowIcon from '../../assets/arrow-icon';
+import ArrowIcon from "../../assets/arrow-icon";
 
 const ArticleItemComponent = ({ article }) => {
   return (
     <ArticleItemContainer>
       <ArticleLeftContent>
         <span>{article.title}</span>
-        <span>{article.createdAt}</span>
+        <ProfileInfoContainer>
+          <img src="" alt="profile"></img>
+          <span>{article.userName}</span>
+          <span>{article.createdAt}</span>
+        </ProfileInfoContainer>
       </ArticleLeftContent>
       <ArticleRightContent>
-        <IconBtn>
-          <MoreIcon color={"#dddddd"} width={16} height={16} />
-        </IconBtn>
-        <IconBtn>
-          <ArrowIcon color={"#dddddd"} width={16} height={16} rotate={270} />
-        </IconBtn>
+        <CountText>👁 {article.viewCount}</CountText>
+        <CountText>👍🏼 {article.likeCount}</CountText>
+        <CountText isAmount={true}>{article.amount} XRP</CountText>
       </ArticleRightContent>
     </ArticleItemContainer>
   );

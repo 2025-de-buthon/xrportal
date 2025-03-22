@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MainLayout from "../../../layouts/main";
 import {
-  AricleListContainer,
+  ArticleListContainer,
   HeaderContent,
   HeaderWrapper,
   Wrapper,
@@ -70,7 +70,7 @@ const MyArticleListPage = () => {
             Created
           </HeaderContent>
         </HeaderWrapper>
-        <AricleListContainer>
+        <ArticleListContainer>
           {articleType === "CREATED" &&
             CREATED_ARTICLE_LIST.map((article) => (
               <ArticleItemComponent key={article.id} article={article} />
@@ -79,7 +79,7 @@ const MyArticleListPage = () => {
             OWNED_ARTICLE_LIST.map((article) => (
               <ArticleItemComponent key={article.id} article={article} />
             ))}
-        </AricleListContainer>
+        </ArticleListContainer>
       </Wrapper>
     </MainLayout>
   );
