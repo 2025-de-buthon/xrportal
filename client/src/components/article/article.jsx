@@ -12,19 +12,6 @@ import CommentListComponent from "./comment-list/comment-list";
 import { Link } from "react-router-dom";
 import { $api } from "../../utils/axios";
 
-const AD = {
-  click_count: 12,
-  id: 2,
-  ad_title: "Ad",
-  ad_content:
-    "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13262118&filePath=L2Rpc2sxL25ld2RhdGEvMjAyMC8yMS9DTFMxMDAwNi82MmZhMWExMy03ZjRmLTQ1NWMtYTZlNy02ZTk2YjhjMjBkYTk=&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
-  start_date: "2025-03-22",
-  end_date: "2025-04-10",
-  user_id: 1,
-  ad_price: 123,
-  createdAt: "2025-03-02",
-};
-
 const ArticleComponent = ({ setIsMintModalOpen, article, onClickLike }) => {
   const [ad, setAd] = useState(null);
 
@@ -41,7 +28,7 @@ const ArticleComponent = ({ setIsMintModalOpen, article, onClickLike }) => {
         setAd(response.data);
       }
     } catch (e) {
-      setAd(AD);
+      console.error(e);
     }
   };
 

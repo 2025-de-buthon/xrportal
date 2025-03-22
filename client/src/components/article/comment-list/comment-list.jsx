@@ -11,17 +11,6 @@ import {
 import { $api } from "../../../utils/axios";
 import useUserStore from '../../../store/auth';
 
-const COMMENTS = [
-  {
-    id: 1,
-    post_id: 1,
-    user_id: 1,
-    comment_content: "content",
-    createdAt: "2025-03-12",
-    likeCount: 190,
-  },
-];
-
 const CommentItem = ({ comment }) => {
   return (
     <CommentItemContainer>
@@ -61,9 +50,7 @@ const CommentListComponent = ({ articleId }) => {
         setComments(response.data);
       }
     } catch (e) {
-      console.log(COMMENTS);
-      
-      setComments(COMMENTS);
+      console.error(e);
     }
   };
 

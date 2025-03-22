@@ -46,7 +46,7 @@ const ArticlePage = () => {
         setArticle(response.data);
       }
     } catch (e) {
-      setArticle(ARTICLE);
+      console.error(e);
     }
   };
 
