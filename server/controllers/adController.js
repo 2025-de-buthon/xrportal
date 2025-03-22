@@ -2,34 +2,46 @@ const Ad = require('../models/Ad');
 const AdClick = require('../models/AdClick');
 const User = require('../models/User');
 const { Op } = require('sequelize');
+const crypto = require('crypto');
 
-// 광고 등록 API
+// Helper: 광고 상태를 동적으로 계산하는 함수
+// today < start_date : "upcoming"
+// start_date <= today <= end_date : "running"
+// today > end_date : "ended"
+const computeAdStatus = (ad) => {
+  const today = new Date();
+  const start = new Date(ad.start_date);
+  const end = new Date(ad.end_date);
+  if (today < start) return "upcoming";
+  else if (today > end) return "ended";
+  else return "running";
+};
+
+// 광고 등록 API (S3 업로드된 이미지 URL 사용)
+// 클라이언트는 multipart/form-data 형식으로 ad_image 파일을 전송합니다.
 exports.createAd = async (req, res) => {
   try {
-    const { ad_title, ad_content, start_date, end_date, user_id, ad_price } = req.body;
+    const { ad_title, start_date, end_date, user_id, ad_price } = req.body;
     
-    // 등록자(user_id) 검증
+    // 사용자 존재 여부 확인
     const user = await User.findByPk(user_id);
     if (!user) {
       return res.status(400).json({ message: 'Invalid user_id. User does not exist.' });
     }
     
-    // 광고 등록 시 광고 비용만큼 토큰 차감 (잔액 부족 시 등록 불가)
-    if (parseFloat(user.user_token_balance) < parseFloat(ad_price)) {
-      return res.status(400).json({ message: 'Insufficient token balance for ad creation.' });
+    // S3 업로드 결과에서 이미지 URL 획득 (multer-s3가 req.file.location에 URL을 저장)
+    const ad_content = req.file ? req.file.location : null;
+    if (!ad_content) {
+      return res.status(400).json({ message: 'Image upload failed.' });
     }
-    user.user_token_balance = parseFloat(user.user_token_balance) - parseFloat(ad_price);
-    await user.save();
     
-    // 광고 생성
     const ad = await Ad.create({
       ad_title,
       ad_content,
       start_date,
       end_date,
       user_id,
-      ad_price,
-      status: 'active'
+      ad_price
     });
     res.status(201).json(ad);
   } catch (error) {
@@ -37,15 +49,13 @@ exports.createAd = async (req, res) => {
   }
 };
 
-// 광고 조회 API (특정 post_id에 대해 랜덤 광고 반환)
+// 광고 조회 API (특정 post_id에 대해 현재 진행 중인 광고 중 랜덤 반환)
 exports.readAd = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const currentDate = new Date();
-    // 활성 상태 및 유효 기간 내인 광고 조회
     const ads = await Ad.findAll({
       where: {
-        status: 'active',
         start_date: { [Op.lte]: currentDate },
         end_date: { [Op.gte]: currentDate }
       }
@@ -55,7 +65,9 @@ exports.readAd = async (req, res) => {
     }
     const randomIndex = Math.floor(Math.random() * ads.length);
     const randomAd = ads[randomIndex];
-    res.json(randomAd);
+    const dynamicStatus = computeAdStatus(randomAd);
+    const adData = { ...randomAd.toJSON(), status: dynamicStatus };
+    res.json(adData);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -81,32 +93,24 @@ exports.clickAd = async (req, res) => {
   try {
     const ad_id = req.params.ad_id;
     const { post_id, user_id } = req.body;
-    
-    // 광고 존재 여부 검증
     const ad = await Ad.findByPk(ad_id);
     if (!ad) {
       return res.status(404).json({ message: 'Ad not found.' });
     }
-    
-    // 클릭 요청한 사용자 검증
     const user = await User.findByPk(user_id);
     if (!user) {
       return res.status(400).json({ message: 'Invalid user_id. User does not exist.' });
     }
-    
-    // 광고 클릭 기록 생성
     const adClick = await AdClick.create({ ad_id, post_id, user_id });
-    // 전역 클릭수 업데이트
-    ad.click_count = ad.click_count + 1;
+    ad.click_count += 1;
     await ad.save();
-    
     res.status(201).json({ message: 'Ad clicked successfully.', adClick });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// 광고 정보 조회 API
+// 광고 정보 조회 API (동적 상태 포함)
 exports.viewAd = async (req, res) => {
   try {
     const ad_id = req.params.ad_id;
@@ -114,7 +118,24 @@ exports.viewAd = async (req, res) => {
     if (!ad) {
       return res.status(404).json({ message: 'Ad not found.' });
     }
-    res.json(ad);
+    const dynamicStatus = computeAdStatus(ad);
+    const adData = { ...ad.toJSON(), status: dynamicStatus };
+    res.json(adData);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 특정 사용자가 등록한 광고 조회 API
+exports.getAdsByUser = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    const ads = await Ad.findAll({ where: { user_id } });
+    const adsWithStatus = ads.map(ad => ({
+      ...ad.toJSON(),
+      status: computeAdStatus(ad)
+    }));
+    res.json(adsWithStatus);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

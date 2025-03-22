@@ -39,7 +39,8 @@ router.post('/create', commentController.createComment);
  * /comments/{comment_id}/likes:
  *   post:
  *     tags: [댓글]
- *     summary: 댓글 좋아요 API
+ *     summary: 댓글 좋아요 토글 API
+ *     description: 동일 user_id가 다시 누르면 좋아요가 취소됩니다.
  *     parameters:
  *       - in: path
  *         name: comment_id
@@ -57,8 +58,8 @@ router.post('/create', commentController.createComment);
  *               user_id:
  *                 type: integer
  *     responses:
- *       201:
- *         description: Comment liked successfully
+ *       200:
+ *         description: Comment like toggled successfully
  */
 router.post('/:comment_id/likes', commentController.likeComment);
 

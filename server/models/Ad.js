@@ -6,16 +6,17 @@ const Ad = sequelize.define('Ad', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  // 광고 내용은 S3 업로드 후 반환된 이미지 URL을 저장합니다.
   ad_content: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
   start_date: {
-    type: DataTypes.DATEONLY,  // 년/월/일만 저장
+    type: DataTypes.DATEONLY,  // YYYY-MM-DD 형식
     allowNull: false,
   },
   end_date: {
-    type: DataTypes.DATEONLY,  // 년/월/일만 저장
+    type: DataTypes.DATEONLY,  // YYYY-MM-DD 형식
     allowNull: false,
   },
   user_id: {
@@ -25,10 +26,6 @@ const Ad = sequelize.define('Ad', {
   ad_price: {
     type: DataTypes.DECIMAL(20, 4),
     allowNull: false,
-  },
-  status: {
-    type: DataTypes.STRING,
-    defaultValue: 'active'
   },
   click_count: {
     type: DataTypes.INTEGER,
