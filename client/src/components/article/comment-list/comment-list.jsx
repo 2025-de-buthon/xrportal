@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   CommentContainer,
   CommentInputForm,
@@ -8,29 +8,44 @@ import {
   ProfileContainer,
   RespondBtnContainer,
 } from "./comment-list.style";
-import { $api } from "../../../utils/axios";
-import useUserStore from '../../../store/auth';
 
 const COMMENTS = [
   {
     id: 1,
-    post_id: 1,
-    user_id: 1,
-    comment_content: "content",
-    createdAt: "2025-03-12",
-    likeCount: 190,
+    name: "asdaasd",
+    userId: "0x1238581",
+    comment: "사용자1: 좋은 정보 감사합니다!",
+    createdAt: "2025년 3월 25일",
+    likeCount: 7,
+  },
+  {
+    id: 2,
+    name: "asdaasd",
+    userId: "0x12385810x12385810x12385810x1238581",
+    comment: "사용자1: 좋은 정보 감사합니다!",
+    createdAt: "2025년 3월 25일",
+    likeCount: 7,
+  },
+  {
+    id: 3,
+    name: "asdaasd",
+    userId: "0x1238581",
+    comment: "사용자1: 좋은 정보 감사합니다!",
+    createdAt: "2025년 3월 25일",
+    likeCount: 7,
   },
 ];
 
 const CommentItem = ({ comment }) => {
+  console.log(comment);
+
   return (
     <CommentItemContainer>
       <ProfileContainer>
         <img src="" alt="profile" />
         <div className="profileInfo">
-          {/* TODO: wallet info 로 수정 */}
-          <span style={{ color: "#FFFFFF" }}>asdsadasd</span>
-          <span style={{ color: "#AAAAAA" }}>{comment.user_id}</span>
+          <span style={{ color: "#FFFFFF" }}>{comment.name}</span>
+          <span style={{ color: "#AAAAAA" }}>{comment.userId}</span>
         </div>
       </ProfileContainer>
       <CommentContainer>
@@ -38,70 +53,28 @@ const CommentItem = ({ comment }) => {
           <span className="createdAt">{comment.createdAt}</span>
           <span className="like">👍🏼 {comment.likeCount}</span>
         </div>
-        <div className="content">{comment.comment_content}</div>
+        <div className="content">{comment.comment}</div>
       </CommentContainer>
     </CommentItemContainer>
   );
 };
 
-const CommentListComponent = ({ articleId }) => {
-  const { user } = useUserStore();
-  const [comments, setComments] = useState([]);
-  const [commentInputValue, setCommentInputValue] = useState('');
-
-  useEffect(() => {
-    if (!articleId) return;
-    fetchComments(articleId);
-  }, [articleId]);
-
-  const fetchComments = async (id) => {
-    try {
-      const response = await $api.get(`/comments/${id}/read`);
-      if (response.data) {
-        setComments(response.data);
-      }
-    } catch (e) {
-      console.log(COMMENTS);
-      
-      setComments(COMMENTS);
-    }
-  };
-
-  const onSubmitComment = async (e)=> {
-    e.preventDefault();
-    
-    if(!commentInputValue && !user && !articleId) return;
-
-    try {
-      const _ = await $api.post('/comments/create', {
-        post_id: articleId,
-        user_id: user.id,
-        comment_content: commentInputValue
-      })
-
-      fetchComments();
-    } catch(e) {
-      console.error('failed to comment submit')
-    }
-  }
-
+const CommentListComponent = () => {
   return (
     <CommentWrapper>
-      <CommentInputForm onSubmit={onSubmitComment}>
+      <CommentInputForm>
         <h2>Comments</h2>
         <textarea
           resize={false}
           multiline={true}
           placeholder="댓글을 입력하세요."
-          value={commentInputValue}
-          onChange={(e) => setCommentInputValue(e.target.value)}
         ></textarea>
         <RespondBtnContainer>
           <button>Respond</button>
         </RespondBtnContainer>
       </CommentInputForm>
       <CommentList>
-        {comments.map((v, i) => (
+        {COMMENTS.map((v, i) => (
           <CommentItem comment={v} key={i} />
         ))}
       </CommentList>

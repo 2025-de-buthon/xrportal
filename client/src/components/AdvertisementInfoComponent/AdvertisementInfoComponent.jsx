@@ -17,11 +17,20 @@ import {
   Divider,
 } from './AdvertisementInfoComponent.style';
 
-const AdvertisementInfoComponent = () => {
+import axios from 'axios' ;
+
+const AdvertisementInfoComponent = ( { ad_id } ) => {
   useEffect(() => {
-    // 초기화 코드 (필요시 추가)
+    getAdvertisement();
     return () => {};
   }, []);
+
+
+  const getAdvertisement = async () => {
+      const res = await axios.get(`http://localhost:3000/advertisement/${ad_id}/detail`);
+      console.log(res);
+  }
+  
 
   // JSON 데이터 (예시)
   const advertisementData = {

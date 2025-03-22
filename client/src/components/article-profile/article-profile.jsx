@@ -14,25 +14,12 @@ const OWNER_INFOR = {
   userId: "0x12934u1991",
 };
 
-const ArticleProfile = ({ article }) => {
-
-  const writerInfo = {
-    type: "WRITER",
-    name: article.writer_name,
-    userId: article.writer_id,
-  };
-
-  const ownerInfo = {
-    type: "OWNER",
-    name: article.owner_name,
-    userId: article.owner_id,
-  };
-
+const ArticleProfile = () => {
   return (
     <>
       <ArticleProfileContainer>
-        <ProfileCard info={writerInfo} />
-        <ProfileCard info={ownerInfo} />
+        <ProfileCard info={WRITER_INFO} />
+        <ProfileCard info={OWNER_INFOR} />
       </ArticleProfileContainer>
     </>
   );

@@ -3,32 +3,26 @@ import { TableRow, TransactionTableContainer } from './transaction-table.style';
 
 const TRANSACTION_DATA = [
   {
-    seller_id: "user1",
-    buyer_id: "user2",
-    post_id: 1,
+    seller: "user1",
+    buyer: "user2",
     amount: 100,
-    gas_fee: 0,
     date: "2025-03-25",
   },
   {
-    seller_id: "user1",
-    buyer_id: "user2",
-    post_id: 1,
+    seller: "user1",
+    buyer: "user2",
     amount: 100,
-    gas_fee: 0,
     date: "2025-03-25",
   },
   {
-    seller_id: "user1",
-    buyer_id: "user2",
-    post_id: 1,
+    seller: "user1",
+    buyer: "user2",
     amount: 100,
-    gas_fee: 0,
     date: "2025-03-25",
   },
 ];
 
-const TransactionTable = () => {
+const TransactionTable = ({data}) => {
 
   return (
     <TransactionTableContainer>

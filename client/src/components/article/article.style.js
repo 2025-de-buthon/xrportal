@@ -17,7 +17,6 @@ export const ArticleHeader = styled.div`
   flex-direction: column;
   row-gap: 12px;
   color: #dddddd;
-  position: relative;
 
   h1 {
     font-size: 28px;
@@ -31,7 +30,6 @@ export const ArticleInfoContainer = styled.div`
   flex-direction: row;
   column-gap: 8px;
   align-items: center;
-  position: relative;
 
   span {
     font-size: 14px;
@@ -83,28 +81,16 @@ export const LikeBtn = styled.button`
 
 export const MintBtn = styled.button`
   background-image: linear-gradient(to right, #1E90FF, #7B43E6);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  padding: 10px 16px;
-  color: white;
 `
 
 export const AdWrapper = styled.div`
   width: 100%;
   height: 150px;
   border-radius: 8px;
-  border: ${props => props.isBorder ? '1px solid rgba(255,255,255,0.1)' : 'none'};
+  border: 1px solid rgba(255,255,255,0.1);
   color: #DDDDDD;
   font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-
-  img {
-    width: 100%; 
-    height: 100%;
-    object-fit: contain; 
-  }
 `
