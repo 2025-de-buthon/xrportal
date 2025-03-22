@@ -2,8 +2,6 @@ import React from "react";
 import { TableRow, TransactionTableContainer } from "./transaction-table.style";
 
 const TransactionTable = ({ data }) => {
-  console.log("asd", data);
-
   return (
     <TransactionTableContainer>
       <TableRow className="tableHeader">

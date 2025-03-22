@@ -15,6 +15,7 @@ const ArticlePage = () => {
   const [article, setArticle] = useState(null);
   const { user } = useUserStore();
   const { id } = useParams();
+  console.log('ArticlePage', id);
 
   useEffect(() => {
     if (!id) return;
@@ -38,11 +39,11 @@ const ArticlePage = () => {
     if (!id && !user) return;
 
     try {
-      const _ = await $api.post(`/comments/${id}/likes`, {
+      await $api.post(`/posts/${id}/like`, {
         user_id: user.id,
       });
 
-      fetchArticle();
+      fetchArticle(id);
     } catch (e) {
       console.error("like post error");
     }
@@ -64,7 +65,7 @@ const ArticlePage = () => {
             onClickLike={onClickLike}
           />
           <ArticleProfile article={article} />
-          <TransactionComponent articleId={article.id} />
+          <TransactionComponent articleId={id} />
         </ArticlePageWrapper>
       ) : (
         <NotFoundComponent />

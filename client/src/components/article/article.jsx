@@ -14,6 +14,8 @@ import { $api } from "../../utils/axios";
 
 const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }) => {
   const [ad, setAd] = useState(null);
+  console.log('ArticleComponent', articleId);
+  
 
   useEffect(() => {
     if (!articleId) return;
@@ -64,7 +66,6 @@ const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }
         )}
       </ArticleHeader>
       <ArticleContentComponent
-        articleId={articleId}
         setIsMintModalOpen={setIsMintModalOpen}
         article={article}
         onClickLike={onClickLike}

@@ -46,17 +46,6 @@ function App() {
     }
   }, [userId, setUser]);
 
-  const fetchUser = async (id) => {
-    try {
-      const res = await $api.get(`/users/me/?user_id=${id}`);
-      if (res.status === 200) {
-        setUser(res.data.user);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   return (
     <BrowserRouter>
       <Routes>

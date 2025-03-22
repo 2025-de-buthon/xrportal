@@ -66,8 +66,8 @@ const CommentListComponent = ({ articleId }) => {
         user_id: user.id,
         comment_content: commentInputValue,
       });
-
-      fetchComments();
+      setCommentInputValue("");
+      fetchComments(articleId);
     } catch (e) {
       console.error("failed to comment submit");
     }
