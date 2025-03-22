@@ -72,9 +72,9 @@ const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }
       />
       <CommentListComponent articleId={articleId} />
       {ad ? (
-        <AdWrapper isBorder={!ad}>
+        <a href='https://www.google.com'><AdWrapper isBorder={!ad}>
           <img src={ad.ad_content} alt="ad" />
-        </AdWrapper>
+        </AdWrapper></a>
       ) : (
         <AdWrapper isBorder={!!ad}>
           🚀 XRPL 기반 광고 | 빠르고 저렴한 트랜잭션
