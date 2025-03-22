@@ -29,7 +29,7 @@ const CreateArticlePage = () => {
               multiline={true}
               placeholder="What's on your mind? (Markdown supported)"
             ></TextInput>
-            <MarkdownPreview markdown={content} />
+            <MarkdownPreview height={200} markdown={content} />
             <WriteBtn onClick={() => setStep("MINTING")}>Write</WriteBtn>
           </div>
         </CreateArticlePageContainer>
