@@ -37,7 +37,7 @@ export const HeaderContent = styled.div`
   }
 `;
 
-export const ArticleListContainer = styled.div`
+export const ListContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;

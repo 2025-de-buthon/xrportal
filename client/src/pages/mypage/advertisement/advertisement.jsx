@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../../../layouts/main";
 import {
-  ArticleListContainer,
   HeaderContent,
   HeaderWrapper,
+  ListContainer,
   Wrapper,
 } from "./advertisement.style";
 import AdvertisementItemComponent from "../../../components/advertisement-item/advertisement-item";
@@ -45,29 +45,25 @@ const MyAdvertisementPage = () => {
     <MainLayout isSidebar={true} width={1024}>
       <Wrapper>
         <HeaderWrapper>
-          <HeaderContent
-            onClick={() => setArticleType("OWNED")}
-            isFocus={articleType === "OWNED"}
-          >
-            Owned
-          </HeaderContent>
-          <HeaderContent
-            onClick={() => setArticleType("CREATED")}
-            isFocus={articleType === "CREATED"}
-          >
-            Created
-          </HeaderContent>
+          {ADVERTISEMENT_TYPE.map((v, i) => (
+            <HeaderContent
+              onClick={() => setAdvertisementType(v)}
+              isFocus={advertisementType === v}
+            >
+              {v}
+            </HeaderContent>
+          ))}
         </HeaderWrapper>
-        <ArticleListContainer>
-          {articleType === "CREATED" &&
-            CREATED_ARTICLE_LIST.map((article) => (
-              <ArticleItemComponent key={article.id} article={article} />
-            ))}
-          {articleType === "OWNED" &&
-            OWNED_ARTICLE_LIST.map((article) => (
-              <ArticleItemComponent key={article.id} article={article} />
-            ))}
-        </ArticleListContainer>
+        <ListContainer>
+          {advertisementList.map((advertisement) => (
+            <Link to={`/advertise/${advertisement.id}`}>
+              <AdvertisementItemComponent
+                key={advertisement.id}
+                advertisement={advertisement}
+              />
+            </Link>
+          ))}
+        </ListContainer>
       </Wrapper>
     </MainLayout>
   );
