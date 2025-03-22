@@ -12,6 +12,7 @@ const commentRoutes = require('./routes/comment');
 const adRoutes = require('./routes/ad');
 const transactionRoutes = require('./routes/transaction');
 const walletRoutes = require('./routes/wallet');
+const nftRoutes = require('./routes/nft'); // 추가
 
 app.use(express.json());
 
@@ -25,6 +26,7 @@ app.use('/comments', commentRoutes);
 app.use('/ads', adRoutes);
 app.use('/transactions', transactionRoutes);
 app.use('/wallet', walletRoutes);
+app.use('/nfts', nftRoutes); 
 
 // 기본 루트 라우트
 app.get('/', (req, res) => {
