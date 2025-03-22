@@ -12,14 +12,14 @@ import CommentListComponent from "./comment-list/comment-list";
 import { Link } from "react-router-dom";
 import { $api } from "../../utils/axios";
 
-const ArticleComponent = ({ setIsMintModalOpen, article, onClickLike }) => {
+const ArticleComponent = ({ articleId,setIsMintModalOpen, article, onClickLike }) => {
   const [ad, setAd] = useState(null);
 
   useEffect(() => {
-    if (!article && !article.id) return;
+    if (!articleId) return;
 
-    fetchAd(article.id);
-  }, [article.id]);
+    fetchAd(articleId);
+  }, [articleId]);
 
   const fetchAd = async (id) => {
     try {
@@ -49,7 +49,7 @@ const ArticleComponent = ({ setIsMintModalOpen, article, onClickLike }) => {
           <span style={{ color: "#CCC", textDecoration: "underline" }}>
             👍🏼 {article.likeCount}
           </span>
-          {article.sale_status && (
+          {!!article.sale_status && (
             <span style={{ color: "#28A745", textDecoration: "underline" }}>
               {article.price} DBT
             </span>
@@ -64,11 +64,12 @@ const ArticleComponent = ({ setIsMintModalOpen, article, onClickLike }) => {
         )}
       </ArticleHeader>
       <ArticleContentComponent
+        articleId={articleId}
         setIsMintModalOpen={setIsMintModalOpen}
         article={article}
         onClickLike={onClickLike}
       />
-      <CommentListComponent articleId={article.id} />
+      <CommentListComponent articleId={articleId} />
       {ad ? (
         <AdWrapper isBorder={!ad}>
           <img src={ad.ad_content} alt="ad" />

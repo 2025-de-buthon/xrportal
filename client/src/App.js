@@ -32,15 +32,17 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-  const { user, setUser } = useUserStore();
+  const { setUser } = useUserStore();
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (userId) {
-      fetchUser(userId);
-    }
-    else {
-      setUser(null);
+      $api.get(`/users/me/?user_id=${userId}`).then(res => {
+        if (res.data)
+          setUser(res.data);
+      }).catch(err => {
+        console.log(err);
+      });
     }
   }, [userId, setUser]);
 

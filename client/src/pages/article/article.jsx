@@ -58,6 +58,7 @@ const ArticlePage = () => {
       {article ? (
         <ArticlePageWrapper>
           <ArticleComponent
+            articleId={id}
             article={article}
             setIsMintModalOpen={setIsMintModalOpen}
             onClickLike={onClickLike}

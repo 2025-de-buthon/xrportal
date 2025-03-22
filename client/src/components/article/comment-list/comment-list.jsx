@@ -40,6 +40,7 @@ const CommentListComponent = ({ articleId }) => {
 
   useEffect(() => {
     if (!articleId) return;
+
     fetchComments(articleId);
   }, [articleId]);
 

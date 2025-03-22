@@ -22,7 +22,7 @@ const ArticleContentComponent = ({
         />
         <ArticleBtnContainer>
           <LikeBtn onClick={() => onClickLike(article.id)}>Like</LikeBtn>
-          {article.sale_status && (
+          {!!article.sale_status && (
             <MintBtn onClick={() => setIsMintModalOpen(true)}>Mint</MintBtn>
           )}
         </ArticleBtnContainer>
