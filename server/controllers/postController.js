@@ -1,38 +1,28 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
 const PostLike = require('../models/PostLike');
+const Transaction = require('../models/Transaction');
 const { Op } = require('sequelize');
+const crypto = require('crypto');
 
-// 게시글 생성 (writer_id와 owner_id가 실제 존재하는지 검증)
-// - owner_id가 전달되지 않으면 writer_id로 설정함
+// 게시글 생성 API (price, gas_fee 제외; sale_status false)
 exports.createPost = async (req, res) => {
   try {
-    const { post_title, post_content, writer_id, owner_id, price, gas_fee } = req.body;
+    const { post_title, post_content, writer_id } = req.body;
     
-    // writer_id가 실제 존재하는지 검증
+    // writer 검증
     const writer = await User.findByPk(writer_id);
     if (!writer) {
       return res.status(400).json({ message: 'Invalid writer_id. User does not exist.' });
     }
     
-    // owner_id가 전달되었으면 실제 사용자인지 검증, 없으면 writer_id로 설정
-    let finalOwnerId = owner_id;
-    if (owner_id) {
-      const owner = await User.findByPk(owner_id);
-      if (!owner) {
-        return res.status(400).json({ message: 'Invalid owner_id. User does not exist.' });
-      }
-    } else {
-      finalOwnerId = writer_id;
-    }
-    
+    // 초기 owner_id는 writer_id, sale_status는 false
     const post = await Post.create({ 
       post_title, 
       post_content, 
       writer_id, 
-      owner_id: finalOwnerId, 
-      price, 
-      gas_fee 
+      owner_id: writer_id,
+      sale_status: false 
     });
     res.status(201).json({ message: 'Post created successfully', post });
   } catch (error) {
@@ -40,108 +30,153 @@ exports.createPost = async (req, res) => {
   }
 };
 
-// 게시글 조회 (조회수 증가 포함, 좋아요 수도 함께 반환)
+// 판매 시작 API: post_id, price, gas_fee를 입력받아 판매 상태 변경
+exports.saleStart = async (req, res) => {
+  try {
+    const { post_id, price, gas_fee } = req.body;
+    const post = await Post.findByPk(post_id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    if (post.sale_status === true) return res.status(400).json({ message: 'Sale already started for this post' });
+    
+    post.price = price;
+    post.gas_fee = gas_fee;
+    post.sale_status = true;
+    await post.save();
+    
+    res.json({ message: 'Sale started successfully', post });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 게시글 조회 API: writer와 owner의 id 및 이름, sale_status 포함
 exports.readPost = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const post = await Post.findByPk(post_id);
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    
     // 조회수 증가
     post.view_count += 1;
     await post.save();
-    // 좋아요 수 집계
+    
+    // writer와 owner 이름 조회
+    const writer = await User.findByPk(post.writer_id);
+    const owner = await User.findByPk(post.owner_id);
+    
     const likeCount = await PostLike.count({ where: { post_id } });
-    const postData = { ...post.toJSON(), likeCount };
+    
+    const postData = {
+      ...post.toJSON(),
+      writer_name: writer ? writer.user_name : null,
+      owner_name: owner ? owner.user_name : null,
+      likeCount
+    };
     res.json(postData);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// 게시글 검색 (제목 검색, 각 게시글의 좋아요 수 포함)
-exports.searchPosts = async (req, res) => {
+// 전체 게시글 조회 API: 정렬(좋아요, 조회수, 최신) 및 판매중 필터 적용
+exports.getAllPosts = async (req, res) => {
   try {
-    const searchText = req.query.text;
-    if (!searchText) {
-      return res.status(400).json({ message: 'text query parameter is required' });
+    let { sort } = req.query;
+    let order = [];
+    let whereClause = {};
+
+    if (sort === 'likes') {
+      // 좋아요 기준 정렬: 모든 게시글을 가져온 후, 각 게시글의 좋아요 수를 계산하여 정렬
+      const posts = await Post.findAll();
+      const postsWithDetails = await Promise.all(posts.map(async (post) => {
+        const likeCount = await PostLike.count({ where: { post_id: post.id } });
+        const writer = await User.findByPk(post.writer_id);
+        const owner = await User.findByPk(post.owner_id);
+        return { 
+          ...post.toJSON(),
+          writer_name: writer ? writer.user_name : null,
+          owner_name: owner ? owner.user_name : null,
+          likeCount
+        };
+      }));
+      postsWithDetails.sort((a, b) => b.likeCount - a.likeCount);
+      return res.json(postsWithDetails);
+    } else if (sort === 'views') {
+      order.push(['view_count', 'DESC']);
+    } else if (sort === 'latest') {
+      order.push(['createdAt', 'DESC']);
+    } else if (sort === 'sale') {
+      // "sale" 옵션인 경우, 판매중인 게시글만 조회하고 최신순 정렬
+      whereClause.sale_status = true;
+      order.push(['createdAt', 'DESC']);
+    } else {
+      // 기본 정렬: 최신순
+      order.push(['createdAt', 'DESC']);
     }
-    const posts = await Post.findAll({
-      where: {
-        post_title: {
-          [Op.like]: `%${searchText}%`
-        }
-      }
-    });
     
-    // 각 게시글에 대해 좋아요 수 집계
-    const postsWithLikes = await Promise.all(posts.map(async (post) => {
+    const posts = await Post.findAll({ where: whereClause, order });
+    const postsWithDetails = await Promise.all(posts.map(async (post) => {
       const likeCount = await PostLike.count({ where: { post_id: post.id } });
-      return { ...post.toJSON(), likeCount };
+      const writer = await User.findByPk(post.writer_id);
+      const owner = await User.findByPk(post.owner_id);
+      return { 
+        ...post.toJSON(),
+        writer_name: writer ? writer.user_name : null,
+        owner_name: owner ? owner.user_name : null,
+        likeCount
+      };
     }));
     
-    res.json(postsWithLikes);
+    res.json(postsWithDetails);
+    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// 게시글 구매 API
-// - 구매 시, buyer_id가 실제 존재하는지 확인하고, 토큰 잔액이 충분한지 검증한 후
-//   구매자의 토큰 잔액을 차감하고, 해당 게시글의 owner_id를 구매자로 업데이트함
+
+
+// 게시글 구매 API: 판매 상태가 true인 게시글을, 판매 시작 API에서 설정한 price 사용하여 구매 처리
 exports.purchasePost = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const { buyer_id } = req.body;
     
-    // 구매자 검증
     const buyer = await User.findByPk(buyer_id);
     if (!buyer) return res.status(404).json({ message: "Buyer not found" });
     
-    // 게시글 존재 여부 확인
     const post = await Post.findByPk(post_id);
     if (!post) return res.status(404).json({ message: "Post not found" });
     
-    // 판매자(현재 게시글 소유자) 검증
+    if (!post.sale_status) return res.status(400).json({ message: "Post is not for sale" });
+    
     const seller = await User.findByPk(post.owner_id);
     if (!seller) return res.status(404).json({ message: "Seller not found" });
     
-    // 구매자가 자기 자신의 게시글을 구매할 수 없음
-    if (buyer_id === seller.id) {
-      return res.status(400).json({ message: "Cannot purchase your own post" });
-    }
+    if (buyer_id === seller.id) return res.status(400).json({ message: "Cannot purchase your own post" });
     
     const postPrice = parseFloat(post.price);
     
-    // 구매자의 토큰 잔액 검증
     if (parseFloat(buyer.user_token_balance) < postPrice) {
       return res.status(400).json({ message: "Insufficient token balance" });
     }
     
-    // 구매자의 토큰 차감
     buyer.user_token_balance = parseFloat(buyer.user_token_balance) - postPrice;
     await buyer.save();
     
-    // 판매자의 토큰 증가
     seller.user_token_balance = parseFloat(seller.user_token_balance) + postPrice;
     await seller.save();
     
-    // 게시글 소유자 업데이트 (구매자로 변경)
     post.owner_id = buyer_id;
     await post.save();
     
-    // 거래 내역 기록 (Transaction 모델 사용)
-    const Transaction = require('../models/Transaction');
-    const crypto = require('crypto');
     const transaction_hash = crypto.randomBytes(16).toString("hex");
-    
     const transaction = await Transaction.create({
       seller_id: seller.id,
       buyer_id: buyer.id,
       post_id: post.id,
       amount: postPrice,
-      gas_fee: 0.001,
+      gas_fee: post.gas_fee,
       transaction_type: "sale",
       transaction_hash,
       status: "completed",
@@ -155,28 +190,26 @@ exports.purchasePost = async (req, res) => {
   }
 };
 
-// 게시글 좋아요 API
-// - user_id와 post_id가 실제 존재하는지 검증한 후 좋아요 기록 생성
+// 게시글 좋아요 API: toggle 방식 (한 번 누르면 등록, 다시 누르면 취소)
 exports.likePost = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const { user_id } = req.body;
     
-    // 게시글 존재 여부 확인
     const post = await Post.findByPk(post_id);
-    if (!post) {
-      return res.status(400).json({ message: 'Invalid post_id. Post does not exist.' });
-    }
+    if (!post) return res.status(400).json({ message: 'Invalid post_id. Post does not exist.' });
     
-    // user_id가 실제 존재하는지 검증
     const user = await User.findByPk(user_id);
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid user_id. User does not exist.' });
-    }
+    if (!user) return res.status(400).json({ message: 'Invalid user_id. User does not exist.' });
     
-    // 좋아요 기록 생성
-    const postLike = await PostLike.create({ post_id, user_id });
-    res.status(201).json({ message: 'Post liked successfully', postLike });
+    let like = await PostLike.findOne({ where: { post_id, user_id } });
+    if (like) {
+      await like.destroy();
+      return res.status(200).json({ message: 'Like removed' });
+    } else {
+      like = await PostLike.create({ post_id, user_id });
+      return res.status(201).json({ message: 'Post liked successfully', like });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

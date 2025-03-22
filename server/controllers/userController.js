@@ -3,8 +3,8 @@ const User = require('../models/User');
 // 회원가입
 exports.signup = async (req, res) => {
   try {
-    const { user_name, user_email, user_pw, user_wallet_address, user_token_balance } = req.body;
-    const user = await User.create({ user_name, user_email, user_pw, user_wallet_address, user_token_balance });
+    const { user_name, user_email, user_pw } = req.body;
+    const user = await User.create({ user_name, user_email, user_pw });
     res.status(201).json({ message: 'User created successfully', user });
   } catch (error) {
     res.status(500).json({ error: error.message });
