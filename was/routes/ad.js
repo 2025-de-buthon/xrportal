@@ -179,4 +179,27 @@ router.get('/:ad_id/views', adController.viewAd);
  */
 router.get('/user/:user_id', adController.getAdsByUser);
 
+
+ /**
+  * @swagger
+  * /ads/user/{user_id}:
+  *   get:
+  *     tags: [광고]
+  *     summary: 사용자 등록 광고 조회 API
+  *     description: 특정 사용자(user_id)가 등록한 모든 광고를 조회합니다.
+  *     parameters:
+  *       - in: path
+  *         name: user_id
+  *         required: true
+  *         schema:
+  *           type: integer
+  *         description: 사용자 ID
+  *     responses:
+  *       200:
+  *         description: 사용자 등록 광고 목록 반환
+  */
+ router.get('/user/:user_id', adController.getAdsByUser);
+
+ module.exports = router;
+
 module.exports = router;

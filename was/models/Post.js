@@ -20,20 +20,24 @@ const Post = sequelize.define('Post', {
   },
   price: {
     type: DataTypes.DECIMAL(20,4),
-    allowNull: true,  // 판매 시작 시 설정
+    allowNull: true, // 판매 시작 API에서 설정
   },
   gas_fee: {
     type: DataTypes.DECIMAL(20,4),
-    allowNull: true,  // 판매 시작 시 설정
-    defaultValue: null
+    allowNull: false,
+    defaultValue: 0.001
+  },
+  nft_id: {
+    type: DataTypes.STRING,  // NFT ID는 문자열로 저장 (숫자형이면 INTEGER로 변경)
+    allowNull: true
   },
   view_count: {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
   sale_status: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+    type: DataTypes.TINYINT(1),
+    defaultValue: 0  // 0: not for sale, 1: for sale (판매 상태 변경 API 등에서 업데이트)
   }
 }, { timestamps: true });
 

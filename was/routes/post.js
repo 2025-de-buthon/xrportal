@@ -15,7 +15,7 @@ const postController = require('../controllers/postController');
  *   post:
  *     tags: [게시글]
  *     summary: 게시글 생성
- *     description: 제목, 내용, writer_id를 입력하여 게시글 생성. 초기 owner_id는 writer_id, sale_status는 false.
+ *     description: 제목, 내용, writer_id, gas_fee, nft_id를 입력하여 게시글을 생성합니다.
  *     requestBody:
  *       required: true
  *       content:
@@ -29,6 +29,16 @@ const postController = require('../controllers/postController');
  *                 type: string
  *               writer_id:
  *                 type: integer
+ *               gas_fee:
+ *                 type: number
+ *               nft_id:
+ *                 type: string
+ *             example:
+ *               post_title: "My First Post"
+ *               post_content: "This is the content of the post in markdown format."
+ *               writer_id: 1
+ *               gas_fee: 0.001
+ *               nft_id: "NFT123456"
  *     responses:
  *       201:
  *         description: Post created successfully
@@ -163,4 +173,25 @@ router.post('/:post_id/purchase', postController.purchasePost);
  */
 router.post('/:post_id/like', postController.likePost);
 
+
+/**
+ * @swagger
+ * /posts/user/{user_id}:
+ *   get:
+ *     tags: [게시글]
+ *     summary: 특정 사용자의 게시글 전체 조회 API
+ *     description: 특정 사용자(user_id)가 작성하거나 소유한 모든 게시글 정보를 반환합니다.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: 사용자 ID
+ *     responses:
+ *       200:
+ *         description: 해당 사용자의 게시글 목록 반환
+ */
+router.get('/user/:user_id', postController.getUserPosts);
+ 
 module.exports = router;

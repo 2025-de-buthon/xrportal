@@ -5,24 +5,26 @@ const Transaction = require('../models/Transaction');
 const { Op } = require('sequelize');
 const crypto = require('crypto');
 
-// 게시글 생성 API (price, gas_fee 제외; sale_status false)
+// 게시글 생성 API (gas_fee와 nft_id 추가)
 exports.createPost = async (req, res) => {
   try {
-    const { post_title, post_content, writer_id } = req.body;
+    const { post_title, post_content, writer_id, gas_fee, nft_id } = req.body;
     
-    // writer 검증
+    // 작성자 검증
     const writer = await User.findByPk(writer_id);
     if (!writer) {
       return res.status(400).json({ message: 'Invalid writer_id. User does not exist.' });
     }
     
-    // 초기 owner_id는 writer_id, sale_status는 false
-    const post = await Post.create({ 
-      post_title, 
-      post_content, 
-      writer_id, 
+    // 초기에는 owner_id를 writer_id로 설정, sale_status는 false (0)
+    const post = await Post.create({
+      post_title,
+      post_content,
+      writer_id,
       owner_id: writer_id,
-      sale_status: false 
+      sale_status: 0,
+      gas_fee,
+      nft_id
     });
     res.status(201).json({ message: 'Post created successfully', post });
   } catch (error) {
@@ -210,6 +212,34 @@ exports.likePost = async (req, res) => {
       like = await PostLike.create({ post_id, user_id });
       return res.status(201).json({ message: 'Post liked successfully', like });
     }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 특정 사용자의 게시글 조회 API
+// writer_id 또는 owner_id가 주어진 user_id인 모든 게시글을 반환하며, writer와 owner의 이름을 포함합니다.
+exports.getUserPosts = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    const posts = await Post.findAll({
+      where: {
+        [Op.or]: [
+          { writer_id: user_id },
+          { owner_id: user_id }
+        ]
+      }
+    });
+    const postsWithDetails = await Promise.all(posts.map(async (post) => {
+      const writer = await User.findByPk(post.writer_id);
+      const owner = await User.findByPk(post.owner_id);
+      return { 
+        ...post.toJSON(),
+        writer_name: writer ? writer.user_name : null,
+        owner_name: owner ? owner.user_name : null,
+      };
+    }));
+    res.json(postsWithDetails);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
